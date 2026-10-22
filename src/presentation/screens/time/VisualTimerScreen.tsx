@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { TimeScreenProps } from '../../navigation/types';
 import TimeTimerRing from '../../components/time/TimeTimerRing';
@@ -8,6 +8,7 @@ import PictoIcon from '../../components/pictograms/PictoIcon';
 import { useTimerStore } from '../../stores/useTimerStore';
 import { useDayStore } from '../../stores/useDayStore';
 import { T, TILE, ToolTopBar, getNowAndNext } from './timeShared';
+import { themedStyles } from '../../theme/tokens';
 
 type Props = TimeScreenProps<'VisualTimer'>;
 
@@ -143,7 +144,7 @@ export default function VisualTimerScreen({ navigation, route }: Props) {
   );
 }
 
-const s = StyleSheet.create({
+const s = themedStyles(() => ({
   safe: { flex: 1, backgroundColor: T.BG },
   content: { paddingHorizontal: 16, paddingBottom: 20 },
 
@@ -164,7 +165,7 @@ const s = StyleSheet.create({
     flex: 1, height: 48, borderRadius: 12, backgroundColor: T.CARD,
     alignItems: 'center', justifyContent: 'center', borderWidth: 1.5, borderColor: T.BORDER,
   },
-  presetActive: { backgroundColor: T.INK, borderColor: T.INK },
+  presetActive: { backgroundColor: T.PRIMARY, borderColor: T.PRIMARY },
   presetText: { fontFamily: T.FONT_DISP, fontSize: 16, fontWeight: '800', color: T.INK },
   presetTextActive: { color: '#fff' },
 
@@ -184,8 +185,8 @@ const s = StyleSheet.create({
     alignItems: 'center', justifyContent: 'center', borderWidth: 1.5, borderColor: T.BORDER,
   },
   mainBtn: {
-    flex: 1, height: 62, borderRadius: 16, backgroundColor: T.INK,
+    flex: 1, height: 62, borderRadius: 16, backgroundColor: T.PRIMARY,
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 10,
   },
   mainText: { fontFamily: T.FONT_DISP, fontSize: 19, fontWeight: '800', color: '#fff' },
-});
+}));

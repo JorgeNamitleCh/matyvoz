@@ -24,7 +24,6 @@ import WordDetailScreen from '../screens/words/WordDetailScreen';
 import AddWordScreen from '../screens/words/AddWordScreen';
 import SentenceBuilderScreen from '../screens/words/SentenceBuilderScreen';
 
-import SettingsScreen from '../screens/settings/SettingsScreen';
 import BottomTabBar from '../components/navigation/BottomTabBar';
 
 const Tab = createBottomTabNavigator<MainTabsParams>();
@@ -98,7 +97,6 @@ export default function MainTabs() {
       <Tab.Screen name="Historias" component={StoriesNavigator} />
       <Tab.Screen name="Tiempo" component={TimeNavigator} />
       <Tab.Screen name="Palabras" component={WordsNavigator} />
-      <Tab.Screen name="Settings" component={SettingsScreen} options={{ tabBarButton: () => null }} />
     </Tab.Navigator>
   );
 }

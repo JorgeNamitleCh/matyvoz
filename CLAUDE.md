@@ -40,11 +40,11 @@ src/
 
 ## Core layer (`src/core/`)
 
-**Entities** (`core/domain/entities/`): pure TypeScript interfaces — `Family`, `Child`, `Activity`, `Story` (+ `StoryStep`), `Word`, `TimerSession`. No class instances, no framework deps.
+**Entities** (`core/domain/entities/`): pure TypeScript interfaces — `Family`, `Child`, `Activity`, `DayActivity`, `Catalog`, `Story` (+ `StoryStep`), `Word`. No class instances, no framework deps.
 
-**Repository interfaces** (`core/domain/repositories/`): `IAuthRepository`, `IChildRepository`, `IActivityRepository`, `IStoryRepository`, `IWordRepository`, `ITimerRepository`. Only these interfaces cross layer boundaries.
+**Repository interfaces** (`core/domain/repositories/`): `IAuthRepository`, `IChildRepository`, `IDayActivityRepository`, `ICatalogRepository`, `IStoryRepository`, `IWordRepository`. Only these interfaces cross layer boundaries.
 
-**Use cases** (`core/domain/usecases/`): one class per operation, receives the repository interface via constructor. Examples: `GetActivitiesForDateUseCase` (merges dated + recurring), `StartTimerUseCase`.
+**Use cases** (`core/domain/usecases/`): one class per operation, receives the repository interface via constructor. They are instantiated in `infrastructure/di/container.ts` (the composition root) and imported from there by stores and screens.
 
 **Errors** (`core/errors/AppError.ts`): `AppError`, `AuthError`, `NotFoundError`, `ValidationError`.
 
@@ -56,7 +56,7 @@ src/
 
 **Mappers** (`data/mappers/`): `fromFirestore(id, data)` / `toFirestore(entity)` static objects for each entity. Firestore Timestamps are converted to `Date` here.
 
-**Firestore collections:** `families`, `children`, `activities`, `stories`, `words`, `timerSessions`
+**Firestore collections:** `families`, `children`, `dayActivities`, `catalogCategories`, `catalogItems`, `stories`, `words`
 
 To add a new backend (REST API): implement the same `IXxxRepository` interfaces in a new `data/repositories/RestXxxRepository.ts`, swap the instantiation in the screens/use cases. Nothing else changes.
 
@@ -75,7 +75,7 @@ To add a new backend (REST API): implement the same `IXxxRepository` interfaces 
 ### Navigation
 `AppNavigator` → auth state decides between `AuthStack` and `MainTabs`.
 
-`MainTabs` has 4 bottom tabs (MiDía, Historias, Tiempo, Palabras) + a hidden Settings screen. Each tab has its own stack navigator.
+`MainTabs` has 4 bottom tabs (MiDía, Historias, Tiempo, Palabras). Each tab has its own stack navigator. Account screens (`Profile`, `EditFamily`, `EditPerson`, `DeleteAccount`) live in the root stack above the tabs; `ProfileButton` (initials circle in the DayScreen header) opens `Profile`.
 
 Navigation types are in `presentation/navigation/types.ts` — use `DayScreenProps<'Day'>` etc. for typed screen props.
 
@@ -84,24 +84,19 @@ Navigation types are in `presentation/navigation/types.ts` — use `DayScreenPro
 | Feature | Screens |
 |---------|---------|
 | Auth | `LoginScreen`, `RegisterScreen` |
-| Onboarding | `ChildDataScreen` (support type + minimal animations), `ChildProfileScreen` (neurodivergence, communication, sensitivities) |
 | Mi día | `DayScreen` (timeline), `ActivityCatalogScreen` (PECS grid), `AddActivityScreen` |
 | Historias | `StoriesLibraryScreen`, `StoryReaderScreen` (child mode: black bg, large text), `StoryEditorScreen`, `TemplatesScreen` |
 | Tiempo | `TimeHubScreen`, `VisualTimerScreen`, `FirstThenScreen`, `HowLongScreen`, `WaitCardScreen` |
 | Palabras | `WordsGlossaryScreen` (PECS sections), `WordDetailScreen`, `AddWordScreen` |
-| Ajustes | `SettingsScreen` (Niño / Familiar mode toggle) |
+| Cuenta | `ProfileScreen`, `EditFamilyScreen`, `EditPersonScreen` (child or adult profile), `DeleteAccountScreen` |
 
 ### Components
-- `PictogramCard` — icon+label, `size` sm/md/lg, `color` prop
-- `ActivityRow` — timeline row with category badge, AHORA button, completion state
-- `PECSCategorySection` — colored header + pictogram grid
-- `DayTimeline` — wraps `ActivityRow` list
-- `VisualTimerCircle` — animated SVG ring (uses `react-native-svg`)
-- `FirstThenBoard` — 2-panel first/then layout
-- `StorySlide` — full-screen step, `childMode` prop for dark bg + large text
-- `PillButton` — primary/secondary/outlined variants
+- `PictoIcon` — MaterialCommunityIcons glyph in a colored rounded box (PECS category colors in `CAT`)
+- `DayCardsView` / `EmptyDayState` — Mi día cards view and empty state (timeline rows live in `DayScreen`)
+- `TimeTimerRing`, `WaitingChild`, `DayItemPickerSheet` — Tiempo tab
+- `RecordAudioSheet`, `EmptyStoriesState` — Historias tab
+- `AppDialog` (via `useDialog()`), `ScreenHeader` (← back + title), `ProfileButton` (initials circle → Profile)
 - `BottomTabBar` — custom tab bar component
-- `ChildAvatar` — avatar + name + age
 
 ---
 
@@ -115,6 +110,14 @@ const { colors, typography, spacing, borderRadius } = useTheme();
 ```
 
 Key design tokens: `colors.primary` (#2D1B5E dark purple), `colors.background` (#F5F0E8 warm cream), `colors.pecsPerson/pecsAction/pecsPlace/pecsEmotion` for PECS color coding. `typography.fontSizeChildBody/fontSizeChildTitle` for child-facing screens.
+
+### Dark mode and larger text (App Store accessibility labels)
+- All colors come from `presentation/theme/tokens.ts` (light + dark palettes). Tokens are `export let` and are reassigned by `applyScheme()`; `AppNavigator` follows `useColorScheme()` and remounts the navigation tree (restoring nav state) when the mode changes.
+- Create styles with `themedStyles(() => ({ ... }))` instead of `StyleSheet.create` — never hardcode `'#fff'`/hex neutrals in a screen.
+- Filled buttons/chips with white text: `PRIMARY` (dark fill), `ACCENT_FILL` (blue), `DANGER_FILL` (red). `ACCENT`/`DANGER` are for text and outlines. Cards: `SURFACE`; subtle fills: `SURFACE_ALT`; dashed/handles: `LINE_STRONG`.
+- PECS pastel colors don't change in dark mode: text/icons on them use the category `stroke`, `INK_ON_PASTEL`, or `T.ON_PASTEL`.
+- `StoryReaderScreen` (child mode) is always black/white in both modes.
+- Text scaling: `patches/react-native+0.85.3.patch` caps system font scaling at 200 % (titles ≥24 px at 140 %). Text inside fixed-size graphics uses `allowFontScaling={false}`; tab labels use `maxFontSizeMultiplier={1.3}`.
 
 ### Firebase config
 `infrastructure/config/firebase.ts` — `@react-native-firebase` auto-discovers native config files. Place `google-services.json` in `android/app/` and `GoogleService-Info.plist` in `ios/MatyVoz/`.
@@ -137,9 +140,10 @@ Key design tokens: `colors.primary` (#2D1B5E dark purple), `colors.background` (
 
 - `StoryReaderScreen` has a child mode: black background, `typography.fontSizeChildTitle` text, no UI chrome, tap to advance.
 - `useTimerStore` manages its own `setInterval` ref — the timer keeps running across navigation.
-- Activity recurrence merging is done in `GetActivitiesForDateUseCase` (not in the repo or the screen).
 - `useAuth` hook (in `presentation/hooks/`) subscribes to `auth().onAuthStateChanged` and updates `useAuthStore` — called once in `App.tsx`.
-- `SettingsScreen` mode toggle (`Niño` / `Familiar`) should gate access to editing screens via a PIN in a future iteration.
+- Legal URLs and support email live in `infrastructure/config/legal.ts`; the pages themselves are in `web/public/` (Firebase Hosting). Firestore security rules are in `firestore.rules`. Deploy both with `firebase deploy --only hosting,firestore:rules`.
+- `FEATURES.socialSignIn` (`infrastructure/config/features.ts`) hides the Apple/Google buttons until they are implemented — store review rejects non-working buttons.
+- Account deletion (`FirebaseAuthRepository.deleteAccount`) reauthenticates, deletes every doc with the family's `familyId`/`childId`, then the auth user. Add any new collection to `FAMILY_COLLECTIONS` there and to `firestore.rules`.
 - `minimalAnimations` flag on `Child` entity should be read in components to skip `Animated` transitions.
 
 

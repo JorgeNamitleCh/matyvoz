@@ -1,10 +1,10 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import PictoIcon from '../pictograms/PictoIcon';
 import { STORY_TEMPLATES, StoryTemplate } from '../../../core/domain/templates/storyTemplates';
 import { KIND_META } from '../../utils/storyKinds';
-import { INK, INK3, BORDER, FONT_DISP, FONT_BODY } from '../../theme/tokens';
+import { SURFACE, INK, INK3, BORDER, LINE, ACCENT, PRIMARY, FONT_DISP, FONT_BODY, themedStyles } from '../../theme/tokens';
 
 interface Props {
   title?: string;
@@ -73,21 +73,21 @@ export default function EmptyStoriesState({
   );
 }
 
-const s = StyleSheet.create({
+const s = themedStyles(() => ({
   root: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 24, paddingVertical: 24 },
 
   fan: { flexDirection: 'row', height: 132, marginBottom: 22 },
   page: {
-    width: 92, height: 120, marginHorizontal: -6, backgroundColor: '#fff', borderRadius: 14,
+    width: 92, height: 120, marginHorizontal: -6, backgroundColor: SURFACE, borderRadius: 14,
     borderWidth: 2, borderColor: INK, alignItems: 'center', paddingTop: 12, gap: 6,
     shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.12, shadowRadius: 8, elevation: 3,
   },
   pageNum: {
-    position: 'absolute', top: -9, left: -9, width: 22, height: 22, borderRadius: 11, backgroundColor: INK,
+    position: 'absolute', top: -9, left: -9, width: 22, height: 22, borderRadius: 11, backgroundColor: PRIMARY,
     alignItems: 'center', justifyContent: 'center',
   },
   pageNumText: { fontFamily: FONT_DISP, fontSize: 12, fontWeight: '800', color: '#fff' },
-  pageLine: { width: 60, height: 5, borderRadius: 3, backgroundColor: 'rgba(0,0,0,0.12)' },
+  pageLine: { width: 60, height: 5, borderRadius: 3, backgroundColor: LINE },
   pageLineShort: { width: 40 },
 
   title: { fontFamily: FONT_DISP, fontSize: 26, fontWeight: '800', color: INK, textAlign: 'center' },
@@ -98,7 +98,7 @@ const s = StyleSheet.create({
 
   cta: {
     marginTop: 22, height: 56, paddingHorizontal: 26, borderRadius: 28,
-    backgroundColor: INK, flexDirection: 'row', alignItems: 'center', gap: 8,
+    backgroundColor: PRIMARY, flexDirection: 'row', alignItems: 'center', gap: 8,
     shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.2, shadowRadius: 8, elevation: 4,
   },
   ctaText: { fontFamily: FONT_DISP, fontSize: 17, fontWeight: '800', color: '#fff' },
@@ -108,9 +108,9 @@ const s = StyleSheet.create({
   quickRow: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: 8 },
   chip: {
     flexDirection: 'row', alignItems: 'center', gap: 8,
-    backgroundColor: '#fff', borderRadius: 999, borderWidth: 1.5, borderColor: BORDER,
+    backgroundColor: SURFACE, borderRadius: 999, borderWidth: 1.5, borderColor: BORDER,
     paddingLeft: 6, paddingRight: 14, paddingVertical: 6,
   },
   chipText: { fontFamily: FONT_BODY, fontSize: 14, fontWeight: '800', color: INK },
-  more: { fontFamily: FONT_BODY, fontSize: 13, fontWeight: '800', color: '#2A5F8F', marginTop: 14 },
-});
+  more: { fontFamily: FONT_BODY, fontSize: 13, fontWeight: '800', color: ACCENT, marginTop: 14 },
+}));

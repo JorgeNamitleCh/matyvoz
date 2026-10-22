@@ -29,3 +29,11 @@ export class ValidationError extends AppError {
     this.name = 'ValidationError';
   }
 }
+
+/** El proveedor exige volver a iniciar sesión antes de una acción delicada (p. ej. borrar la cuenta). */
+export class RecentLoginRequiredError extends AppError {
+  constructor() {
+    super('RECENT_LOGIN_REQUIRED', 'Vuelve a iniciar sesión para continuar.');
+    this.name = 'RecentLoginRequiredError';
+  }
+}

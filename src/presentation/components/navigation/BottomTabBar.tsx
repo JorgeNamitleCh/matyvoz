@@ -1,12 +1,9 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { SURFACE, INK, INK3, BORDER, FONT_BODY, themedStyles } from '../../theme/tokens';
 
-const INK = '#2D2620';
-const BORDER = 'rgba(0,0,0,0.08)';
-const INK3 = '#8a8a8a';
-const FONT_BODY = 'Atkinson Hyperlegible';
 
 const INACTIVE_OPACITY = 0.38;
 
@@ -22,7 +19,7 @@ const TAB_CONFIG: Record<string, TabCfg> = {
 };
 
 export default function BottomTabBar({ state, navigation }: BottomTabBarProps) {
-  const visibleRoutes = state.routes.filter(r => r.name !== 'Settings');
+  const visibleRoutes = state.routes;
 
   // Pantallas inmersivas (lector en modo niño) ocultan la barra de pestañas.
   const focused = state.routes[state.index];
@@ -59,7 +56,8 @@ export default function BottomTabBar({ state, navigation }: BottomTabBarProps) {
                 color={cfg.stroke}
               />
             </View>
-            <Text style={[s.label, isFocused && s.labelActive]}>{cfg.label}</Text>
+            {/* Etiquetas de pestaña: crecen poco (como en iOS) para no partirse en dos renglones. */}
+            <Text style={[s.label, isFocused && s.labelActive]} maxFontSizeMultiplier={1.3} numberOfLines={1}>{cfg.label}</Text>
           </TouchableOpacity>
         );
       })}
@@ -67,10 +65,10 @@ export default function BottomTabBar({ state, navigation }: BottomTabBarProps) {
   );
 }
 
-const s = StyleSheet.create({
+const s = themedStyles(() => ({
   bar: {
     flexDirection: 'row',
-    backgroundColor: '#fff',
+    backgroundColor: SURFACE,
     borderTopWidth: 2,
     borderTopColor: BORDER,
     paddingTop: 8,
@@ -79,4 +77,4 @@ const s = StyleSheet.create({
   tab: { flex: 1, alignItems: 'center', gap: 4 },
   label: { fontFamily: FONT_BODY, fontSize: 9, fontWeight: '800', letterSpacing: 0.3, color: INK3 },
   labelActive: { color: INK },
-});
+}));

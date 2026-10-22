@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { INK, themedStyles } from '../../theme/tokens';
 
 // ARASAAC-inspired category palette
 export const CAT = {
@@ -174,14 +175,14 @@ export default function PictoIcon({ kind, cat, color, imageUri, size = 64, label
   );
 }
 
-const s = StyleSheet.create({
+const s = themedStyles(() => ({
   wrap: { alignItems: 'center', gap: 4 },
   box: { alignItems: 'center', justifyContent: 'center' },
   image: { width: '100%', height: '100%' },
   label: {
     fontWeight: '700',
-    color: '#2a2a2a',
+    color: INK,
     textAlign: 'center',
     fontFamily: 'Atkinson Hyperlegible',
   },
-});
+}));

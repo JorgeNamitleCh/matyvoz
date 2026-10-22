@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { Modal, View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import TimeOfDayPicker, { formatFriendlyTime } from './TimeOfDayPicker';
 import PictoIcon from '../pictograms/PictoIcon';
-import { INK, INK3, BORDER, BG, FONT_DISP, FONT_BODY } from '../../theme/tokens';
+import { BG, SURFACE, INK, INK3, BORDER, LINE_STRONG, PRIMARY, FONT_DISP, FONT_BODY, themedStyles } from '../../theme/tokens';
 
 interface Props {
   visible: boolean;
@@ -81,15 +81,15 @@ export default function TimeEditModal({ visible, activity, onClose, onSave }: Pr
   );
 }
 
-const s = StyleSheet.create({
+const s = themedStyles(() => ({
   root: { flex: 1, justifyContent: 'flex-end' },
   backdrop: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.45)' },
   sheet: {
-    backgroundColor: '#fff', borderTopLeftRadius: 26, borderTopRightRadius: 26,
+    backgroundColor: SURFACE, borderTopLeftRadius: 26, borderTopRightRadius: 26,
     maxHeight: '90%', paddingBottom: 24,
   },
   handle: {
-    width: 42, height: 5, backgroundColor: 'rgba(0,0,0,0.18)',
+    width: 42, height: 5, backgroundColor: LINE_STRONG,
     borderRadius: 3, alignSelf: 'center', marginTop: 10, marginBottom: 12,
   },
   header: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: 18, paddingBottom: 14 },
@@ -103,11 +103,11 @@ const s = StyleSheet.create({
   body: { paddingHorizontal: 18, paddingBottom: 12 },
   footer: { paddingHorizontal: 18, paddingTop: 6 },
   saveBtn: {
-    minHeight: 64, borderRadius: 18, backgroundColor: INK,
+    minHeight: 64, borderRadius: 18, backgroundColor: PRIMARY,
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 12,
   },
   saveBtnDisabled: { opacity: 0.35 },
   saveTextCol: { alignItems: 'flex-start' },
   saveText: { fontFamily: FONT_DISP, fontWeight: '800', fontSize: 18, color: '#fff' },
   saveSub: { fontFamily: FONT_BODY, fontWeight: '600', fontSize: 13, color: 'rgba(255,255,255,0.8)' },
-});
+}));

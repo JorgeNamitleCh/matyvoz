@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  View, Text, StyleSheet, ScrollView, TouchableOpacity, SafeAreaView, TextInput, Dimensions,
+  View, Text, ScrollView, TouchableOpacity, SafeAreaView, TextInput, Dimensions,
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { WordsScreenProps } from '../../navigation/types';
@@ -8,6 +8,7 @@ import PictoIcon from '../../components/pictograms/PictoIcon';
 import { useWordsStore } from '../../stores/useWordsStore';
 import { WORD_SECTIONS } from '../../utils/wordCategories';
 import { T } from '../time/timeShared';
+import { themedStyles } from '../../theme/tokens';
 
 type Props = WordsScreenProps<'WordsGlossary'>;
 
@@ -107,13 +108,13 @@ export default function WordsGlossaryScreen({ navigation }: Props) {
   );
 }
 
-const s = StyleSheet.create({
+const s = themedStyles(() => ({
   safe: { flex: 1, backgroundColor: T.BG },
   flex: { flex: 1 },
   header: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: PAD, paddingTop: 10, paddingBottom: 12 },
   title: { fontFamily: T.FONT_DISP, fontSize: 28, fontWeight: '800', color: T.INK },
   sub: { fontFamily: T.FONT_BODY, fontSize: 11, fontWeight: '700', color: T.INK3, marginTop: 1 },
-  newBtn: { backgroundColor: T.INK, borderRadius: 10, paddingHorizontal: 14, height: 40, justifyContent: 'center' },
+  newBtn: { backgroundColor: T.PRIMARY, borderRadius: 10, paddingHorizontal: 14, height: 40, justifyContent: 'center' },
   newText: { fontFamily: T.FONT_DISP, fontSize: 14, fontWeight: '800', color: '#fff' },
 
   search: {
@@ -132,13 +133,13 @@ const s = StyleSheet.create({
 
   empty: { alignItems: 'center', paddingVertical: 60, gap: 10 },
   emptyTitle: { fontFamily: T.FONT_DISP, fontSize: 20, fontWeight: '800', color: T.INK },
-  emptyBtn: { height: 48, paddingHorizontal: 22, borderRadius: 24, backgroundColor: T.INK, justifyContent: 'center' },
+  emptyBtn: { height: 48, paddingHorizontal: 22, borderRadius: 24, backgroundColor: T.PRIMARY, justifyContent: 'center' },
   emptyBtnText: { fontFamily: T.FONT_DISP, fontSize: 15, fontWeight: '800', color: '#fff' },
 
   fab: {
     position: 'absolute', right: 16, bottom: 16, height: 54, paddingHorizontal: 20, borderRadius: 27,
-    backgroundColor: T.ACCENT, flexDirection: 'row', alignItems: 'center', gap: 8,
+    backgroundColor: T.ACCENT_FILL, flexDirection: 'row', alignItems: 'center', gap: 8,
     shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.25, shadowRadius: 8, elevation: 6,
   },
   fabText: { fontFamily: T.FONT_DISP, fontSize: 16, fontWeight: '800', color: '#fff' },
-});
+}));

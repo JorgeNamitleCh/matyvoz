@@ -2,7 +2,7 @@ import React from 'react';
 import {
   Modal, View, Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform,
 } from 'react-native';
-import { BG, INK, INK3, BORDER, DANGER, FONT_DISP, FONT_BODY } from '../../theme/tokens';
+import { BG, SURFACE, INK, INK3, BORDER, PRIMARY, DANGER_FILL, FONT_DISP, FONT_BODY, themedStyles } from '../../theme/tokens';
 
 export interface DialogButton {
   text: string;
@@ -62,14 +62,14 @@ export default function AppDialog({ visible, title, message, buttons, onRequestC
   );
 }
 
-const s = StyleSheet.create({
+const s = themedStyles(() => ({
   backdrop: {
     flex: 1, backgroundColor: 'rgba(0,0,0,0.5)',
     alignItems: 'center', justifyContent: 'center', padding: 24,
   },
   card: {
     width: '100%', maxWidth: 360,
-    backgroundColor: '#fff', borderRadius: 18, padding: 20,
+    backgroundColor: SURFACE, borderRadius: 18, padding: 20,
     shadowColor: '#000', shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.2, shadowRadius: 16,
   },
@@ -82,9 +82,9 @@ const s = StyleSheet.create({
     alignItems: 'center', justifyContent: 'center',
   },
   btnCancel: { backgroundColor: BG, borderWidth: 1.5, borderColor: BORDER },
-  btnDefault: { backgroundColor: INK },
-  btnDestructive: { backgroundColor: DANGER },
+  btnDefault: { backgroundColor: PRIMARY },
+  btnDestructive: { backgroundColor: DANGER_FILL },
   btnText: { fontFamily: FONT_DISP, fontWeight: '800', fontSize: 15 },
   btnTextCancel: { color: INK },
   btnTextOnDark: { color: '#fff' },
-});
+}));

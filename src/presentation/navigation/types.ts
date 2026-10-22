@@ -5,8 +5,6 @@ import { StackScreenProps } from '@react-navigation/stack';
 export type AuthStackParams = {
   Login: undefined;
   Register: undefined;
-  ChildData: undefined;
-  ChildProfile: undefined;
 };
 
 export type DayStackParams = {
@@ -47,12 +45,16 @@ export type MainTabsParams = {
   Historias: NavigatorScreenParams<StoriesStackParams>;
   Tiempo: NavigatorScreenParams<TimeStackParams>;
   Palabras: NavigatorScreenParams<WordsStackParams>;
-  Settings: undefined;
 };
 
 export type RootStackParams = {
   Auth: NavigatorScreenParams<AuthStackParams>;
   Main: NavigatorScreenParams<MainTabsParams>;
+  /** Cuenta: se abren encima de las pestañas. */
+  Profile: undefined;
+  EditFamily: undefined;
+  EditPerson: undefined;
+  DeleteAccount: undefined;
 };
 
 export type AuthScreenProps<T extends keyof AuthStackParams> = StackScreenProps<AuthStackParams, T>;
@@ -60,3 +62,4 @@ export type DayScreenProps<T extends keyof DayStackParams> = StackScreenProps<Da
 export type StoriesScreenProps<T extends keyof StoriesStackParams> = StackScreenProps<StoriesStackParams, T>;
 export type TimeScreenProps<T extends keyof TimeStackParams> = StackScreenProps<TimeStackParams, T>;
 export type WordsScreenProps<T extends keyof WordsStackParams> = StackScreenProps<WordsStackParams, T>;
+export type RootScreenProps<T extends keyof RootStackParams> = StackScreenProps<RootStackParams, T>;

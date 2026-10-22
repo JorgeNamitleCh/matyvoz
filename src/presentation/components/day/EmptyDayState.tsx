@@ -1,9 +1,9 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import PictoIcon, { CAT } from '../pictograms/PictoIcon';
 import { useCatalogStore } from '../../stores/useCatalogStore';
-import { INK, INK3, BORDER, FONT_DISP, FONT_BODY } from '../../theme/tokens';
+import { SURFACE, INK, INK3, BORDER, PRIMARY, FONT_DISP, FONT_BODY, themedStyles } from '../../theme/tokens';
 
 interface Props {
   onAdd: () => void;
@@ -83,7 +83,7 @@ export default function EmptyDayState({ onAdd, onQuickPick }: Props) {
   );
 }
 
-const s = StyleSheet.create({
+const s = themedStyles(() => ({
   root: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 28, paddingBottom: 40 },
 
   fan: { flexDirection: 'row', alignItems: 'flex-start', height: 96, marginBottom: 26 },
@@ -101,7 +101,7 @@ const s = StyleSheet.create({
 
   cta: {
     marginTop: 24, height: 56, paddingHorizontal: 26, borderRadius: 28,
-    backgroundColor: INK, flexDirection: 'row', alignItems: 'center', gap: 8,
+    backgroundColor: PRIMARY, flexDirection: 'row', alignItems: 'center', gap: 8,
     shadowColor: '#000', shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2, shadowRadius: 8, elevation: 4,
   },
@@ -112,8 +112,8 @@ const s = StyleSheet.create({
   quickRow: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: 8 },
   chip: {
     flexDirection: 'row', alignItems: 'center', gap: 8,
-    backgroundColor: '#fff', borderRadius: 999, borderWidth: 1.5, borderColor: BORDER,
+    backgroundColor: SURFACE, borderRadius: 999, borderWidth: 1.5, borderColor: BORDER,
     paddingLeft: 6, paddingRight: 14, paddingVertical: 6,
   },
   chipText: { fontFamily: FONT_BODY, fontSize: 14, fontWeight: '800', color: INK },
-});
+}));

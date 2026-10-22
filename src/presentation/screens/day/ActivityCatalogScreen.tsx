@@ -1,23 +1,17 @@
 import React, { useState } from 'react';
 import {
-  View, Text, TextInput, TouchableOpacity, StyleSheet,
-  ScrollView, SafeAreaView, Dimensions,
+  View, Text, TextInput, TouchableOpacity, ScrollView, SafeAreaView, Dimensions,
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DayScreenProps } from '../../navigation/types';
 import PictoIcon from '../../components/pictograms/PictoIcon';
 import { useCatalogStore } from '../../stores/useCatalogStore';
 import { useDialog } from '../../providers/DialogProvider';
+import { BG, SURFACE, INK, INK3, BORDER, PRIMARY, INK_ON_PASTEL, FONT_DISP, FONT_BODY, themedStyles } from '../../theme/tokens';
 
 type Props = DayScreenProps<'ActivityCatalog'>;
 
-const BG = '#EFEEEA';
-const INK = '#2D2620';
-const BORDER = 'rgba(0,0,0,0.08)';
-const INK3 = '#8a8a8a';
 const SEARCH_ICON_BG = '#E8E0D0';
-const FONT_DISP = 'Nunito ExtraLight';
-const FONT_BODY = 'Atkinson Hyperlegible';
 
 const SCREEN_W = Dimensions.get('window').width;
 const GRID_PAD = 14;
@@ -67,7 +61,7 @@ export default function ActivityCatalogScreen({ navigation }: Props) {
       {/* Buscador */}
       <View style={s.searchWrap}>
         <View style={s.searchIconBox}>
-          <MaterialCommunityIcons name="magnify" size={16} color={INK} />
+          <MaterialCommunityIcons name="magnify" size={16} color={INK_ON_PASTEL} />
         </View>
         <TextInput
           style={s.searchInput}
@@ -131,7 +125,7 @@ export default function ActivityCatalogScreen({ navigation }: Props) {
   );
 }
 
-const s = StyleSheet.create({
+const s = themedStyles(() => ({
   safe: { flex: 1, backgroundColor: BG },
 
   header: {
@@ -140,10 +134,10 @@ const s = StyleSheet.create({
   },
   iconBtn: {
     width: 40, height: 40, borderRadius: 10,
-    backgroundColor: '#fff', borderWidth: 1.5, borderColor: BORDER,
+    backgroundColor: SURFACE, borderWidth: 1.5, borderColor: BORDER,
     alignItems: 'center', justifyContent: 'center',
   },
-  newBtn: { backgroundColor: INK, borderColor: INK },
+  newBtn: { backgroundColor: PRIMARY, borderColor: PRIMARY },
   backArrow: { fontSize: 16, color: INK },
   headerTitle: { fontFamily: FONT_DISP, fontSize: 18, fontWeight: '800', color: INK },
   headerSub: { fontFamily: FONT_BODY, fontSize: 11, color: INK3, fontWeight: '600' },
@@ -151,7 +145,7 @@ const s = StyleSheet.create({
   searchWrap: {
     flexDirection: 'row', alignItems: 'center', gap: 8,
     marginHorizontal: 14, marginBottom: 10,
-    backgroundColor: '#fff', borderRadius: 10,
+    backgroundColor: SURFACE, borderRadius: 10,
     borderWidth: 1.5, borderColor: BORDER,
     paddingHorizontal: 8, paddingVertical: 8,
   },
@@ -168,10 +162,10 @@ const s = StyleSheet.create({
   filtersContent: { paddingHorizontal: 14, gap: 6, paddingVertical: 8, alignItems: 'center' },
   filterChip: {
     paddingHorizontal: 12, paddingVertical: 6, borderRadius: 999,
-    backgroundColor: '#fff', borderWidth: 1.5, borderColor: BORDER,
+    backgroundColor: SURFACE, borderWidth: 1.5, borderColor: BORDER,
   },
   gridScroll: { flex: 1 },
-  filterChipActive: { backgroundColor: INK, borderColor: INK },
+  filterChipActive: { backgroundColor: PRIMARY, borderColor: PRIMARY },
   filterText: { fontFamily: FONT_BODY, fontSize: 12, fontWeight: '700', color: INK },
   filterTextActive: { color: '#fff' },
 
@@ -192,8 +186,8 @@ const s = StyleSheet.create({
   addBadge: {
     position: 'absolute', top: -4, right: -4,
     width: 22, height: 22, borderRadius: 11,
-    backgroundColor: INK, borderWidth: 2, borderColor: '#fff',
+    backgroundColor: PRIMARY, borderWidth: 2, borderColor: SURFACE,
     alignItems: 'center', justifyContent: 'center',
   },
   addBadgeText: { color: '#fff', fontSize: 13, fontWeight: '800', lineHeight: 14 },
-});
+}));

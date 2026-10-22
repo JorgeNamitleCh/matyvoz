@@ -1,9 +1,9 @@
 import React from 'react';
-import { Modal, View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { Modal, View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import PictoIcon from '../pictograms/PictoIcon';
 import { DayItem } from '../../stores/useDayStore';
-import { INK, INK3, BORDER, BG, FONT_DISP, FONT_BODY } from '../../theme/tokens';
+import { BG, SURFACE, INK, INK3, BORDER, LINE_STRONG, FONT_DISP, FONT_BODY, themedStyles } from '../../theme/tokens';
 
 interface Props {
   visible: boolean;
@@ -55,15 +55,15 @@ export default function DayItemPickerSheet({ visible, title, items, selectedId, 
   );
 }
 
-const s = StyleSheet.create({
+const s = themedStyles(() => ({
   root: { flex: 1, justifyContent: 'flex-end' },
   backdrop: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.45)' },
   sheet: { backgroundColor: BG, borderTopLeftRadius: 26, borderTopRightRadius: 26, maxHeight: '75%', paddingBottom: 28 },
-  handle: { width: 42, height: 5, borderRadius: 3, backgroundColor: 'rgba(0,0,0,0.18)', alignSelf: 'center', marginTop: 10, marginBottom: 10 },
+  handle: { width: 42, height: 5, borderRadius: 3, backgroundColor: LINE_STRONG, alignSelf: 'center', marginTop: 10, marginBottom: 10 },
   title: { fontFamily: FONT_DISP, fontSize: 20, fontWeight: '800', color: INK, paddingHorizontal: 18, marginBottom: 10 },
   list: { paddingHorizontal: 16, gap: 8 },
   row: {
-    flexDirection: 'row', alignItems: 'center', gap: 12, backgroundColor: '#fff',
+    flexDirection: 'row', alignItems: 'center', gap: 12, backgroundColor: SURFACE,
     borderRadius: 16, padding: 10, borderWidth: 2, borderColor: BORDER,
   },
   rowActive: { borderColor: INK },
@@ -72,4 +72,4 @@ const s = StyleSheet.create({
   rowSub: { fontFamily: FONT_BODY, fontSize: 12, fontWeight: '700', color: INK3 },
   noneIcon: { width: 44, height: 44, borderRadius: 10, backgroundColor: BG, alignItems: 'center', justifyContent: 'center' },
   empty: { fontFamily: FONT_BODY, fontSize: 14, color: INK3, textAlign: 'center', paddingVertical: 20 },
-});
+}));

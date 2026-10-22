@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
-  Animated, View, Text, Image, TouchableOpacity, StyleSheet, Dimensions, LayoutChangeEvent,
+  Animated, View, Text, Image, TouchableOpacity, Dimensions, LayoutChangeEvent,
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { iconNameFor } from '../pictograms/PictoIcon';
 import { formatShortTime } from '../common/TimeOfDayPicker';
 import { DayItem } from '../../stores/useDayStore';
-import { INK, ACCENT, INK3, BORDER, FONT_DISP, FONT_BODY } from '../../theme/tokens';
+import { SURFACE, INK, INK3, BORDER, ACCENT, ACCENT_SOFT, ACCENT_FILL, PRIMARY, FONT_DISP, FONT_BODY, themedStyles } from '../../theme/tokens';
 
 interface Props {
   items: DayItem[];
@@ -155,18 +155,18 @@ export default function DayCardsView({ items, onPressItem, onPressTime, onMarkDo
   );
 }
 
-const s = StyleSheet.create({
+const s = themedStyles(() => ({
   scroll: { flex: 1 },
   content: { paddingTop: PAD_TOP, paddingHorizontal: SIDE, paddingBottom: 110 },
 
   // La sombra va en el contenedor: en iOS `overflow: hidden` la recortaría.
   cardWrap: {
-    height: CARD_H, marginBottom: GAP, borderRadius: 26, backgroundColor: '#fff',
+    height: CARD_H, marginBottom: GAP, borderRadius: 26, backgroundColor: SURFACE,
     shadowColor: '#000', shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.12, shadowRadius: 16, elevation: 5,
   },
   card: {
-    flex: 1, backgroundColor: '#fff', borderRadius: 26, overflow: 'hidden',
+    flex: 1, backgroundColor: SURFACE, borderRadius: 26, overflow: 'hidden',
     borderWidth: 1.5, borderColor: BORDER,
   },
   cardNow: { borderColor: ACCENT, borderWidth: 3 },
@@ -177,9 +177,9 @@ const s = StyleSheet.create({
   nowRibbon: {
     position: 'absolute', top: 14, left: 14,
     flexDirection: 'row', alignItems: 'center', gap: 6,
-    backgroundColor: ACCENT, borderRadius: 999, paddingHorizontal: 12, paddingVertical: 6,
+    backgroundColor: ACCENT_FILL, borderRadius: 999, paddingHorizontal: 12, paddingVertical: 6,
   },
-  nowDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: '#fff' },
+  nowDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: SURFACE },
   nowRibbonText: { fontFamily: FONT_DISP, fontSize: 13, fontWeight: '800', color: '#fff', letterSpacing: 0.6 },
 
   doneOverlay: {
@@ -187,7 +187,7 @@ const s = StyleSheet.create({
     backgroundColor: 'rgba(45,38,32,0.45)', alignItems: 'center', justifyContent: 'center',
   },
   doneBadge: {
-    width: 84, height: 84, borderRadius: 42, backgroundColor: INK,
+    width: 84, height: 84, borderRadius: 42, backgroundColor: PRIMARY,
     alignItems: 'center', justifyContent: 'center', borderWidth: 4, borderColor: '#fff',
   },
 
@@ -202,7 +202,7 @@ const s = StyleSheet.create({
   infoTop: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   timeChip: {
     flexDirection: 'row', alignItems: 'center', gap: 5,
-    backgroundColor: '#EAF1F7', borderRadius: 10, paddingHorizontal: 10, paddingVertical: 5,
+    backgroundColor: ACCENT_SOFT, borderRadius: 10, paddingHorizontal: 10, paddingVertical: 5,
   },
   timeText: { fontFamily: FONT_DISP, fontSize: 16, fontWeight: '800', color: ACCENT },
   badge: { paddingHorizontal: 8, paddingVertical: 4, borderRadius: 7, flexShrink: 1 },
@@ -213,7 +213,7 @@ const s = StyleSheet.create({
   nameDone: { color: INK3, textDecorationLine: 'line-through' },
   doneBtn: {
     flexDirection: 'row', alignItems: 'center', gap: 6,
-    backgroundColor: ACCENT, borderRadius: 14, paddingHorizontal: 14, height: 44,
+    backgroundColor: ACCENT_FILL, borderRadius: 14, paddingHorizontal: 14, height: 44,
   },
   doneBtnText: { fontFamily: FONT_DISP, fontSize: 16, fontWeight: '800', color: '#fff' },
-});
+}));

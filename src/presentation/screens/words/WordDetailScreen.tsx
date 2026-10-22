@@ -12,6 +12,7 @@ import { useDialog } from '../../providers/DialogProvider';
 import { sectionOf } from '../../utils/wordCategories';
 import { playStep, stopVoice } from '../../utils/stepVoice';
 import { T } from '../time/timeShared';
+import { SURFACE_ALT, themedStyles } from '../../theme/tokens';
 
 type Props = WordsScreenProps<'WordDetail'>;
 
@@ -184,7 +185,7 @@ export default function WordDetailScreen({ navigation, route }: Props) {
   );
 }
 
-const s = StyleSheet.create({
+const s = themedStyles(() => ({
   safe: { flex: 1, backgroundColor: T.BG },
   flex: { flex: 1 },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 10 },
@@ -203,7 +204,7 @@ const s = StyleSheet.create({
   photoCard: {
     width: PHOTO_W, borderRadius: 22, overflow: 'hidden', borderWidth: 3, borderColor: T.INK, marginBottom: 6,
   },
-  photoHead: { backgroundColor: T.INK, paddingHorizontal: 12, paddingVertical: 6 },
+  photoHead: { backgroundColor: T.PRIMARY, paddingHorizontal: 12, paddingVertical: 6 },
   photoHeadText: { fontFamily: T.FONT_BODY, fontSize: 10, fontWeight: '800', letterSpacing: 1, color: '#fff' },
   photo: { height: PHOTO_H, alignItems: 'center', justifyContent: 'center' },
   photoIcon: { marginBottom: PHOTO_H * 0.12 },
@@ -212,7 +213,7 @@ const s = StyleSheet.create({
   photoSub: { fontFamily: T.FONT_BODY, fontSize: 12, fontWeight: '700', color: 'rgba(255,255,255,0.85)' },
 
   hear: {
-    height: 60, borderRadius: 16, backgroundColor: T.INK,
+    height: 60, borderRadius: 16, backgroundColor: T.PRIMARY,
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 12,
   },
   hearIcon: {
@@ -230,8 +231,8 @@ const s = StyleSheet.create({
 
   appearRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 4 },
   appearItem: {
-    width: '31.5%', alignItems: 'center', gap: 4, backgroundColor: '#F4F2EE',
+    width: '31.5%', alignItems: 'center', gap: 4, backgroundColor: SURFACE_ALT,
     borderRadius: 10, paddingVertical: 10, paddingHorizontal: 4,
   },
   appearText: { fontFamily: T.FONT_BODY, fontSize: 10, fontWeight: '800', color: T.INK, textAlign: 'center' },
-});
+}));

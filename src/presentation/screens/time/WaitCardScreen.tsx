@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
-  View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, Animated, Vibration, Easing,
+  View, Text, TouchableOpacity, SafeAreaView, ScrollView, Animated, Vibration, Easing,
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { TimeScreenProps } from '../../navigation/types';
@@ -9,6 +9,7 @@ import DayItemPickerSheet from '../../components/time/DayItemPickerSheet';
 import PictoIcon from '../../components/pictograms/PictoIcon';
 import { useDayStore } from '../../stores/useDayStore';
 import { T, TILE, ToolTopBar, getNowAndNext } from './timeShared';
+import { themedStyles } from '../../theme/tokens';
 
 type Props = TimeScreenProps<'WaitCard'>;
 
@@ -213,7 +214,7 @@ export default function WaitCardScreen({ navigation }: Props) {
   );
 }
 
-const s = StyleSheet.create({
+const s = themedStyles(() => ({
   safe: { flex: 1, backgroundColor: T.BG },
   content: { paddingHorizontal: 16, paddingBottom: 16 },
   flex: { flex: 1 },
@@ -224,15 +225,15 @@ const s = StyleSheet.create({
     paddingTop: 18, paddingBottom: 22, paddingHorizontal: 16,
   },
   cardDone: { backgroundColor: TILE.green.bg, borderColor: TILE.green.stroke },
-  big: { fontFamily: T.FONT_DISP, fontSize: 40, fontWeight: '800', color: T.INK, letterSpacing: 2, marginTop: 6 },
-  caption: { fontFamily: T.FONT_BODY, fontSize: 15, fontWeight: '700', color: T.INK, opacity: 0.8, marginTop: 2 },
+  big: { fontFamily: T.FONT_DISP, fontSize: 40, fontWeight: '800', color: T.ON_PASTEL, letterSpacing: 2, marginTop: 6 },
+  caption: { fontFamily: T.FONT_BODY, fontSize: 15, fontWeight: '700', color: T.ON_PASTEL, opacity: 0.8, marginTop: 2 },
 
   dotsRow: { flexDirection: 'row', gap: 10, marginTop: 16 },
   dot: {
-    width: 36, height: 36, borderRadius: 18, borderWidth: 3, borderColor: T.INK,
+    width: 36, height: 36, borderRadius: 18, borderWidth: 3, borderColor: T.ON_PASTEL,
     backgroundColor: 'rgba(255,255,255,0.6)', alignItems: 'center', justifyContent: 'center',
   },
-  dotFilled: { backgroundColor: T.INK },
+  dotFilled: { backgroundColor: T.ON_PASTEL },
 
   label: {
     fontFamily: T.FONT_BODY, fontSize: 10, fontWeight: '800', letterSpacing: 0.7,
@@ -254,14 +255,14 @@ const s = StyleSheet.create({
     flex: 1, height: 50, borderRadius: 12, backgroundColor: T.CARD,
     borderWidth: 1.5, borderColor: T.BORDER, alignItems: 'center', justifyContent: 'center',
   },
-  durBtnActive: { backgroundColor: T.INK, borderColor: T.INK },
+  durBtnActive: { backgroundColor: T.PRIMARY, borderColor: T.PRIMARY },
   durText: { fontFamily: T.FONT_DISP, fontSize: 14, fontWeight: '800', color: T.INK },
   durTextActive: { color: '#fff' },
 
   footer: { paddingHorizontal: 16, paddingBottom: 14, paddingTop: 6 },
   doneRow: { flexDirection: 'row', gap: 10 },
   mainBtn: {
-    height: 60, borderRadius: 16, backgroundColor: T.INK,
+    height: 60, borderRadius: 16, backgroundColor: T.PRIMARY,
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 10,
   },
   mainText: { fontFamily: T.FONT_DISP, fontSize: 18, fontWeight: '800', color: '#fff' },
@@ -269,4 +270,4 @@ const s = StyleSheet.create({
     width: 60, height: 60, borderRadius: 16, backgroundColor: T.CARD,
     alignItems: 'center', justifyContent: 'center', borderWidth: 1.5, borderColor: T.BORDER,
   },
-});
+}));

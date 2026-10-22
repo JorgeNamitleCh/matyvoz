@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import {
-  View, Text, StyleSheet, ScrollView, TouchableOpacity, SafeAreaView, Animated, LayoutAnimation,
+  View, Text, ScrollView, TouchableOpacity, SafeAreaView, Animated, LayoutAnimation,
 } from 'react-native';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -13,6 +13,7 @@ import { useDayStore } from '../../stores/useDayStore';
 import { useDialog } from '../../providers/DialogProvider';
 import { Story } from '../../../core/domain/entities';
 import { T } from '../time/timeShared';
+import { SURFACE_ALT, INK_ON_PASTEL, themedStyles } from '../../theme/tokens';
 
 type Props = StoriesScreenProps<'StoriesLibrary'>;
 type Filter = 'todas' | 'fijadas' | 'borradores' | 'compartidas';
@@ -143,7 +144,7 @@ export default function StoriesLibraryScreen({ navigation }: Props) {
             >
               <View style={s.todayIcon}>
                 {today ? (
-                  <PictoIcon kind={today.iconKey} color={{ bg: '#F3E9D6', stroke: T.INK }} size={38} hideLabel />
+                  <PictoIcon kind={today.iconKey} color={{ bg: '#F3E9D6', stroke: INK_ON_PASTEL }} size={38} hideLabel />
                 ) : (
                   <MaterialCommunityIcons name="clock-outline" size={22} color={T.INK} />
                 )}
@@ -235,13 +236,13 @@ export default function StoriesLibraryScreen({ navigation }: Props) {
   );
 }
 
-const s = StyleSheet.create({
+const s = themedStyles(() => ({
   safe: { flex: 1, backgroundColor: T.BG },
   flex: { flex: 1 },
   header: { flexDirection: 'row', alignItems: 'flex-end', paddingHorizontal: 16, paddingTop: 8, paddingBottom: 12 },
   kicker: { fontFamily: T.FONT_BODY, fontSize: 11, fontWeight: '800', letterSpacing: 0.6, color: T.INK3 },
   title: { fontFamily: T.FONT_DISP, fontSize: 28, fontWeight: '800', color: T.INK },
-  newBtn: { backgroundColor: T.INK, borderRadius: 10, paddingHorizontal: 14, height: 40, justifyContent: 'center' },
+  newBtn: { backgroundColor: T.PRIMARY, borderRadius: 10, paddingHorizontal: 14, height: 40, justifyContent: 'center' },
   newText: { fontFamily: T.FONT_DISP, fontSize: 14, fontWeight: '800', color: '#fff' },
 
   content: { paddingHorizontal: 16, paddingBottom: 24 },
@@ -250,7 +251,7 @@ const s = StyleSheet.create({
   topRow: { flexDirection: 'row', gap: 10, marginBottom: 12 },
   todayCard: {
     flex: 1, flexDirection: 'row', alignItems: 'center', gap: 10,
-    backgroundColor: T.INK, borderRadius: 14, padding: 12, minHeight: 68,
+    backgroundColor: T.PRIMARY, borderRadius: 14, padding: 12, minHeight: 68,
   },
   todayIcon: { width: 40, height: 40, borderRadius: 10, backgroundColor: '#F3E9D6', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' },
   todayKicker: { fontFamily: T.FONT_BODY, fontSize: 10, fontWeight: '800', letterSpacing: 0.6, color: 'rgba(255,255,255,0.7)' },
@@ -271,7 +272,7 @@ const s = StyleSheet.create({
     paddingHorizontal: 14, paddingVertical: 7, borderRadius: 999,
     backgroundColor: T.CARD, borderWidth: 1.5, borderColor: T.BORDER,
   },
-  chipActive: { backgroundColor: T.INK, borderColor: T.INK },
+  chipActive: { backgroundColor: T.PRIMARY, borderColor: T.PRIMARY },
   chipText: { fontFamily: T.FONT_BODY, fontSize: 12, fontWeight: '800', color: T.INK },
   chipTextActive: { color: '#fff' },
 
@@ -288,9 +289,9 @@ const s = StyleSheet.create({
   rowTitleLine: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   rowTitle: { fontFamily: T.FONT_DISP, fontSize: 16, fontWeight: '800', color: T.INK, flexShrink: 1 },
   rowSub: { fontFamily: T.FONT_BODY, fontSize: 11, fontWeight: '700', color: T.INK3, marginTop: 2 },
-  chevron: { width: 30, height: 30, borderRadius: 15, backgroundColor: '#F1EFEA', alignItems: 'center', justifyContent: 'center' },
+  chevron: { width: 30, height: 30, borderRadius: 15, backgroundColor: SURFACE_ALT, alignItems: 'center', justifyContent: 'center' },
 
   actions: { flexDirection: 'row', marginLeft: 6 },
   action: { width: ACTION_W, marginLeft: 6, borderRadius: 14, alignItems: 'center', justifyContent: 'center', gap: 3 },
   actionText: { fontFamily: T.FONT_DISP, fontSize: 11, fontWeight: '800', color: '#fff' },
-});
+}));

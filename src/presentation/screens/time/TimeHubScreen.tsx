@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, SafeAreaView } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, SafeAreaView } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { TimeScreenProps } from '../../navigation/types';
 import PictoIcon from '../../components/pictograms/PictoIcon';
@@ -7,6 +7,7 @@ import TimeTimerRing from '../../components/time/TimeTimerRing';
 import { useDayStore } from '../../stores/useDayStore';
 import { useTimerStore } from '../../stores/useTimerStore';
 import { T, TILE, toMin, nowMin, getNowAndNext } from './timeShared';
+import { SURFACE_ALT, themedStyles } from '../../theme/tokens';
 
 type Props = TimeScreenProps<'TimeHub'>;
 
@@ -104,7 +105,8 @@ export default function TimeHubScreen({ navigation }: Props) {
             color={T.RED}
             ink={T.INK}
           >
-            <Text style={s.miniRingText}>{timerMin}m</Text>
+            {/* Va dentro del reloj (tamaño fijo): no escala con el texto del sistema. */}
+            <Text style={s.miniRingText} allowFontScaling={false}>{timerMin}m</Text>
           </TimeTimerRing>
           <View style={s.timerInfo}>
             <Text style={s.toolTitleLg}>Temporizador visual</Text>
@@ -177,7 +179,7 @@ function ToolCard({
   );
 }
 
-const s = StyleSheet.create({
+const s = themedStyles(() => ({
   safe: { flex: 1, backgroundColor: T.BG },
   content: { paddingHorizontal: 16, paddingTop: 12, paddingBottom: 28 },
 
@@ -225,9 +227,9 @@ const s = StyleSheet.create({
   whenRow: { flexDirection: 'row', gap: 8 },
   whenBtn: {
     flex: 1, height: 64, borderRadius: 12, borderWidth: 1.5, borderColor: T.BORDER,
-    backgroundColor: '#F7F6F3', alignItems: 'center', justifyContent: 'center', gap: 4,
+    backgroundColor: SURFACE_ALT, alignItems: 'center', justifyContent: 'center', gap: 4,
   },
-  whenBtnActive: { backgroundColor: T.INK, borderColor: T.INK },
+  whenBtnActive: { backgroundColor: T.PRIMARY, borderColor: T.PRIMARY },
   whenText: { fontFamily: T.FONT_BODY, fontSize: 12, fontWeight: '800', color: T.INK },
   whenTextActive: { color: '#fff' },
-});
+}));

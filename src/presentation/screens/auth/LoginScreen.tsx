@@ -2,48 +2,59 @@ import React, { useState } from 'react';
 import {
   View,
   Text,
-  TextInput,
   TouchableOpacity,
-  StyleSheet,
   ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  Linking,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useAuthStore } from '../../stores/useAuthStore';
-import { FirebaseAuthRepository } from '../../../data/repositories/FirebaseAuthRepository';
-import { SignInWithEmailUseCase } from '../../../core/domain/usecases/auth/SignInWithEmailUseCase';
 import { AuthScreenProps } from '../../navigation/types';
+import { useDialog } from '../../providers/DialogProvider';
+import AuthHero from '../../components/auth/AuthHero';
+import AuthField from '../../components/auth/AuthField';
+import { accountUseCases } from '../../../infrastructure/di/container';
+import { FEATURES } from '../../../infrastructure/config/features';
+import { LEGAL } from '../../../infrastructure/config/legal';
+import { BG, SURFACE, INK, INK3, BORDER, ACCENT, PRIMARY, DANGER, DANGER_BG, FONT_DISP, FONT_BODY, themedStyles } from '../../theme/tokens';
 
 type Props = AuthScreenProps<'Login'>;
 
-const authRepo = new FirebaseAuthRepository();
-const signInUseCase = new SignInWithEmailUseCase(authRepo);
-
-const BG = '#EFEEEA';
-const INK = '#2D2620';
-const ACCENT = '#2A5F8F';
-const BORDER = 'rgba(0,0,0,0.08)';
-const INK3 = '#8a8a8a';
-const FONT_DISP = 'Nunito ExtraLight';
-const FONT_BODY = 'Atkinson Hyperlegible';
-
 export default function LoginScreen({ navigation }: Props) {
   const setFamily = useAuthStore(s => s.setFamily);
+  const { showDialog } = useDialog();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  const handleForgot = async () => {
+    if (!email.trim()) {
+      setError('Escribe tu correo y vuelve a tocar "¿Olvidaste tu contraseña?".');
+      return;
+    }
+    setError('');
+    try {
+      await accountUseCases.sendPasswordReset.execute(email);
+    } catch {
+      // Por seguridad no revelamos si el correo tiene cuenta.
+    }
+    showDialog({
+      title: 'Revisa tu correo',
+      message: `Si ${email.trim()} tiene una cuenta, te enviamos un enlace para crear una contraseña nueva.`,
+    });
+  };
+
   const handleLogin = async () => {
-    if (!email || !password) { setError('Completa todos los campos.'); return; }
+    if (!email.trim() || !password) { setError('Escribe tu correo y tu contraseña.'); return; }
     setError('');
     setLoading(true);
     try {
-      const family = await signInUseCase.execute(email.trim(), password);
+      const family = await accountUseCases.signIn.execute(email.trim(), password);
       setFamily(family);
     } catch {
       setError('Correo o contraseña incorrectos.');
@@ -53,175 +64,160 @@ export default function LoginScreen({ navigation }: Props) {
   };
 
   return (
-    <SafeAreaView style={s.safe} edges={['top']}>
-      <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-        <ScrollView contentContainerStyle={s.scroll} keyboardShouldPersistTaps="handled">
+    <SafeAreaView style={s.safe} edges={['bottom']}>
+      <KeyboardAvoidingView style={s.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+        <ScrollView
+          contentContainerStyle={s.scroll}
+          keyboardShouldPersistTaps="handled"
+          bounces={false}
+        >
+          <AuthHero subtitle="Rutinas, historias y palabras para cada día." />
 
-          {/* Logo + nombre de app */}
-          <View style={s.logoRow}>
-            <View style={s.logoBox}>
-              <Text style={s.logoEmoji}>📖</Text>
-            </View>
-            <View>
-              <Text style={s.appName}>MatyVoz</Text>
-              <Text style={s.appTagline}>Historias sociales para tu peque</Text>
-            </View>
-          </View>
-
-          {/* Título */}
-          <View style={s.titleBlock}>
+          <View style={s.card}>
             <Text style={s.title}>Hola de nuevo</Text>
-            <Text style={s.subtitle}>Inicia sesión para ver las historias y la rutina del día.</Text>
-          </View>
+            <Text style={s.subtitle}>Inicia sesión para ver la rutina y las historias.</Text>
 
-          {/* SSO */}
-          <TouchableOpacity style={s.appleBtn}>
-            <Text style={s.appleBtnIcon}></Text>
-            <Text style={s.appleBtnText}>Continuar con Apple</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={s.googleBtn}>
-            <Text style={s.googleG}>G</Text>
-            <Text style={s.googleBtnText}>Continuar con Google</Text>
-          </TouchableOpacity>
+            {FEATURES.socialSignIn && (
+              <>
+                <TouchableOpacity style={s.appleBtn}>
+                  <MaterialCommunityIcons name="apple" size={20} color="#fff" />
+                  <Text style={s.appleBtnText}>Continuar con Apple</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={s.googleBtn}>
+                  <MaterialCommunityIcons name="google" size={18} color="#4285F4" />
+                  <Text style={s.googleBtnText}>Continuar con Google</Text>
+                </TouchableOpacity>
+                <View style={s.divider}>
+                  <View style={s.dividerLine} />
+                  <Text style={s.dividerText}>o con tu correo</Text>
+                  <View style={s.dividerLine} />
+                </View>
+              </>
+            )}
 
-          {/* Separador */}
-          <View style={s.divider}>
-            <View style={s.dividerLine} />
-            <Text style={s.dividerText}>O CON CORREO</Text>
-            <View style={s.dividerLine} />
-          </View>
-
-          {/* Correo */}
-          <Text style={s.label}>CORREO</Text>
-          <TextInput
-            style={s.input}
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
-            autoCapitalize="none"
-            autoCorrect={false}
-            placeholder="marta@familia.com"
-            placeholderTextColor={INK3}
-          />
-
-          {/* Contraseña */}
-          <View style={s.labelRow}>
-            <Text style={s.label}>CONTRASEÑA</Text>
-            <TouchableOpacity>
-              <Text style={s.forgot}>¿Olvidaste?</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={s.passwordWrap}>
-            <TextInput
-              style={s.passwordInput}
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry={!showPassword}
-              placeholder="••••••••"
-              placeholderTextColor={INK3}
+            <AuthField
+              label="Correo"
+              icon="email-outline"
+              value={email}
+              onChangeText={v => { setEmail(v); setError(''); }}
+              keyboardType="email-address"
+              autoCapitalize="none"
+              autoCorrect={false}
+              autoComplete="email"
+              textContentType="emailAddress"
+              returnKeyType="next"
+              placeholder="tucorreo@ejemplo.com"
             />
-            <TouchableOpacity style={s.showBtn} onPress={() => setShowPassword(v => !v)}>
-              <Text style={s.showBtnText}>{showPassword ? 'Ocultar' : 'Mostrar'}</Text>
+            <AuthField
+              label="Contraseña"
+              icon="lock-outline"
+              password
+              labelAction={{ text: '¿Olvidaste tu contraseña?', onPress: handleForgot }}
+              value={password}
+              onChangeText={v => { setPassword(v); setError(''); }}
+              autoCapitalize="none"
+              autoComplete="password"
+              textContentType="password"
+              returnKeyType="go"
+              onSubmitEditing={handleLogin}
+              placeholder="Tu contraseña"
+            />
+
+            {error ? (
+              <View style={s.errorBox}>
+                <MaterialCommunityIcons name="alert-circle-outline" size={18} color={DANGER} />
+                <Text style={s.errorText}>{error}</Text>
+              </View>
+            ) : null}
+
+            <TouchableOpacity
+              style={[s.primaryBtn, loading && s.disabledBtn]}
+              onPress={handleLogin}
+              disabled={loading}
+            >
+              {loading
+                ? <ActivityIndicator color="#fff" />
+                : <Text style={s.primaryBtnText}>Iniciar sesión</Text>}
             </TouchableOpacity>
           </View>
 
-          {error ? <Text style={s.error}>{error}</Text> : null}
-
-          {/* Botón principal */}
-          <TouchableOpacity style={s.primaryBtn} onPress={handleLogin} disabled={loading}>
-            {loading
-              ? <ActivityIndicator color="#fff" />
-              : <Text style={s.primaryBtnText}>Iniciar sesión</Text>}
-          </TouchableOpacity>
-
-          <View style={{ flex: 1, minHeight: 16 }} />
-
-          {/* Footer */}
           <View style={s.footer}>
-            <Text style={s.footerText}>¿Sin cuenta? </Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-              <Text style={s.footerLink}>Crear cuenta</Text>
+            <Text style={s.footerText}>¿Primera vez en MatyVoz?</Text>
+            <TouchableOpacity style={s.secondaryBtn} onPress={() => navigation.navigate('Register')}>
+              <Text style={s.secondaryBtnText}>Crear una cuenta</Text>
             </TouchableOpacity>
           </View>
 
+          <View style={s.flex} />
+
+          <View style={s.legal}>
+            <Text style={s.legalLink} onPress={() => Linking.openURL(LEGAL.privacyUrl)}>Privacidad</Text>
+            <Text style={s.legalDot}>·</Text>
+            <Text style={s.legalLink} onPress={() => Linking.openURL(LEGAL.termsUrl)}>Términos</Text>
+            <Text style={s.legalDot}>·</Text>
+            <Text style={s.legalLink} onPress={() => Linking.openURL(LEGAL.supportUrl)}>Ayuda</Text>
+          </View>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
 
-const s = StyleSheet.create({
+const s = themedStyles(() => ({
   safe: { flex: 1, backgroundColor: BG },
-  scroll: { flexGrow: 1, paddingHorizontal: 22, paddingTop: 32, paddingBottom: 22 },
+  flex: { flex: 1 },
+  scroll: { flexGrow: 1, paddingBottom: 16 },
 
-  logoRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 26 },
-  logoBox: {
-    width: 56, height: 56, borderRadius: 14,
-    backgroundColor: '#E8F5E9', borderWidth: 3, borderColor: '#388E3C',
-    alignItems: 'center', justifyContent: 'center', marginRight: 10,
+  card: {
+    backgroundColor: SURFACE,
+    marginHorizontal: 16, marginTop: -36,
+    borderRadius: 24, padding: 22,
+    shadowColor: '#1d2a36', shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.1, shadowRadius: 24, elevation: 6,
   },
-  logoEmoji: { fontSize: 28 },
-  appName: { fontFamily: FONT_DISP, fontSize: 22, fontWeight: '800', lineHeight: 22, color: INK },
-  appTagline: { fontFamily: FONT_BODY, fontSize: 12, color: INK3, fontWeight: '600', marginTop: 2 },
-
-  titleBlock: { marginBottom: 22 },
-  title: { fontFamily: FONT_DISP, fontSize: 28, fontWeight: '800', lineHeight: 31, color: INK },
-  subtitle: { fontFamily: FONT_BODY, fontSize: 14, color: INK3, marginTop: 6, lineHeight: 20 },
+  title: { fontFamily: FONT_DISP, fontSize: 26, fontWeight: '800', color: INK, letterSpacing: -0.3 },
+  subtitle: { fontFamily: FONT_BODY, fontSize: 14, color: INK3, marginTop: 4, marginBottom: 20, lineHeight: 20 },
 
   appleBtn: {
-    height: 56, borderRadius: 14, backgroundColor: '#000',
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
+    height: 52, borderRadius: 14, backgroundColor: '#000',
+    flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,
     marginBottom: 10,
   },
-  appleBtnIcon: { color: '#fff', fontSize: 18, marginRight: 10 },
-  appleBtnText: { fontFamily: FONT_DISP, color: '#fff', fontWeight: '800', fontSize: 16 },
-
+  appleBtnText: { fontFamily: FONT_DISP, color: '#fff', fontWeight: '800', fontSize: 15 },
   googleBtn: {
-    height: 56, borderRadius: 14, backgroundColor: '#fff',
+    height: 52, borderRadius: 14, backgroundColor: SURFACE,
     borderWidth: 1.5, borderColor: BORDER,
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-    marginBottom: 0,
+    flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,
   },
-  googleG: { fontSize: 16, fontWeight: '700', color: '#4285F4', marginRight: 10 },
-  googleBtnText: { fontFamily: FONT_DISP, color: INK, fontWeight: '800', fontSize: 16 },
-
-  divider: { flexDirection: 'row', alignItems: 'center', paddingTop: 20, paddingBottom: 16 },
+  googleBtnText: { fontFamily: FONT_DISP, color: INK, fontWeight: '800', fontSize: 15 },
+  divider: { flexDirection: 'row', alignItems: 'center', marginVertical: 18 },
   dividerLine: { flex: 1, height: 1, backgroundColor: BORDER },
-  dividerText: { fontFamily: FONT_BODY, marginHorizontal: 10, fontSize: 11, fontWeight: '800', letterSpacing: 1, color: INK3 },
+  dividerText: { fontFamily: FONT_BODY, marginHorizontal: 10, fontSize: 12, fontWeight: '600', color: INK3 },
 
-  label: { fontFamily: FONT_BODY, fontSize: 11, color: INK3, fontWeight: '800', letterSpacing: 0.5, marginBottom: 6 },
-  input: {
-    fontFamily: FONT_BODY,
-    backgroundColor: '#fff', borderRadius: 12,
-    paddingHorizontal: 16, paddingVertical: 14,
-    borderWidth: 1.5, borderColor: BORDER,
-    fontSize: 15, fontWeight: '600', color: INK,
-    marginBottom: 10,
+  errorBox: {
+    flexDirection: 'row', alignItems: 'center', gap: 8,
+    backgroundColor: DANGER_BG, borderRadius: 12,
+    paddingHorizontal: 12, paddingVertical: 10, marginBottom: 4,
   },
-
-  labelRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 },
-  forgot: { fontFamily: FONT_BODY, fontSize: 11, color: ACCENT, fontWeight: '700' },
-
-  passwordWrap: { marginBottom: 10 },
-  passwordInput: {
-    fontFamily: FONT_BODY,
-    backgroundColor: '#fff', borderRadius: 12,
-    paddingHorizontal: 16, paddingVertical: 14, paddingRight: 80,
-    borderWidth: 1.5, borderColor: BORDER,
-    fontSize: 18, fontWeight: '700', letterSpacing: 4, color: INK,
-  },
-  showBtn: { position: 'absolute', right: 16, top: 14 },
-  showBtnText: { fontFamily: FONT_BODY, fontSize: 12, color: INK3, fontWeight: '700' },
-
-  error: { fontFamily: FONT_BODY, color: '#D32F2F', fontSize: 13, marginBottom: 8 },
+  errorText: { flex: 1, fontFamily: FONT_BODY, fontSize: 13, fontWeight: '600', color: DANGER },
 
   primaryBtn: {
-    height: 56, borderRadius: 14, backgroundColor: INK,
-    alignItems: 'center', justifyContent: 'center', marginTop: 16,
+    height: 54, borderRadius: 14, backgroundColor: PRIMARY,
+    alignItems: 'center', justifyContent: 'center', marginTop: 10,
   },
+  disabledBtn: { opacity: 0.6 },
   primaryBtnText: { fontFamily: FONT_DISP, color: '#fff', fontWeight: '800', fontSize: 16 },
 
-  footer: { flexDirection: 'row', justifyContent: 'center', paddingTop: 18, paddingBottom: 4 },
-  footerText: { fontFamily: FONT_BODY, fontSize: 14, color: INK3, fontWeight: '600' },
-  footerLink: { fontFamily: FONT_BODY, fontSize: 14, color: ACCENT, fontWeight: '800' },
-});
+  footer: { alignItems: 'center', marginTop: 24, paddingHorizontal: 16 },
+  footerText: { fontFamily: FONT_BODY, fontSize: 14, color: INK3, fontWeight: '600', marginBottom: 10 },
+  secondaryBtn: {
+    alignSelf: 'stretch', height: 52, borderRadius: 14,
+    borderWidth: 1.5, borderColor: ACCENT,
+    alignItems: 'center', justifyContent: 'center',
+  },
+  secondaryBtnText: { fontFamily: FONT_DISP, color: ACCENT, fontWeight: '800', fontSize: 15 },
+
+  legal: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 8, paddingTop: 20 },
+  legalLink: { fontFamily: FONT_BODY, fontSize: 12, color: INK3, fontWeight: '600' },
+  legalDot: { fontSize: 12, color: INK3 },
+}));

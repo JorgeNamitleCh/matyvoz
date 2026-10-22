@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
+import { View, Text, SafeAreaView, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { TimeScreenProps } from '../../navigation/types';
 import PictoIcon from '../../components/pictograms/PictoIcon';
 import { useDayStore } from '../../stores/useDayStore';
 import { T, ToolTopBar, getNowAndNext, toMin, nowMin, fmtDuration } from './timeShared';
+import { SURFACE_ALT, LINE, themedStyles } from '../../theme/tokens';
 
 type Props = TimeScreenProps<'HowLong'>;
 
@@ -129,7 +130,7 @@ export default function HowLongScreen({ navigation }: Props) {
   );
 }
 
-const s = StyleSheet.create({
+const s = themedStyles(() => ({
   safe: { flex: 1, backgroundColor: T.BG },
   content: { paddingHorizontal: 16, paddingBottom: 28 },
 
@@ -151,13 +152,13 @@ const s = StyleSheet.create({
   card: { backgroundColor: T.CARD, borderRadius: 18, padding: 14, gap: 10 },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: GAP },
   square: { borderRadius: 7, alignItems: 'center', justifyContent: 'center', borderWidth: 1.5 },
-  squareDone: { backgroundColor: T.INK, borderColor: T.INK },
-  squareLeft: { backgroundColor: '#F4F2EE', borderColor: 'rgba(0,0,0,0.14)' },
+  squareDone: { backgroundColor: T.PRIMARY, borderColor: T.PRIMARY },
+  squareLeft: { backgroundColor: SURFACE_ALT, borderColor: LINE },
   squareText: { fontFamily: T.FONT_BODY, fontSize: 10, fontWeight: '800', color: T.INK3 },
   edgeText: { fontFamily: T.FONT_BODY, fontSize: 10, fontWeight: '800', letterSpacing: 0.5, color: T.INK2 },
   hint: {
     flexDirection: 'row', alignItems: 'center', gap: 8,
-    backgroundColor: '#F4F2EE', borderRadius: 10, paddingHorizontal: 12, paddingVertical: 10,
+    backgroundColor: SURFACE_ALT, borderRadius: 10, paddingHorizontal: 12, paddingVertical: 10,
   },
   hintText: { fontFamily: T.FONT_BODY, fontSize: 12, fontWeight: '800', color: T.INK },
 
@@ -173,6 +174,6 @@ const s = StyleSheet.create({
   empty: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 32, gap: 10 },
   emptyTitle: { fontFamily: T.FONT_DISP, fontSize: 22, fontWeight: '800', color: T.INK, textAlign: 'center' },
   emptyText: { fontFamily: T.FONT_BODY, fontSize: 14, color: T.INK3, textAlign: 'center' },
-  emptyBtn: { marginTop: 8, height: 50, paddingHorizontal: 24, borderRadius: 25, backgroundColor: T.INK, justifyContent: 'center' },
+  emptyBtn: { marginTop: 8, height: 50, paddingHorizontal: 24, borderRadius: 25, backgroundColor: T.PRIMARY, justifyContent: 'center' },
   emptyBtnText: { fontFamily: T.FONT_DISP, fontSize: 16, fontWeight: '800', color: '#fff' },
-});
+}));

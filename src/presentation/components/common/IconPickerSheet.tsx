@@ -1,7 +1,7 @@
 import React from 'react';
-import { Modal, View, Text, TouchableOpacity, StyleSheet, ScrollView, Dimensions } from 'react-native';
+import { Modal, View, Text, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import PictoIcon, { ICON_CHOICES } from '../pictograms/PictoIcon';
-import { INK, BG, FONT_DISP } from '../../theme/tokens';
+import { BG, INK, LINE_STRONG, FONT_DISP, themedStyles } from '../../theme/tokens';
 
 interface Props {
   visible: boolean;
@@ -43,13 +43,13 @@ export default function IconPickerSheet({ visible, title, color, colorFor, selec
   );
 }
 
-const s = StyleSheet.create({
+const s = themedStyles(() => ({
   root: { flex: 1, justifyContent: 'flex-end' },
   backdrop: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.45)' },
   sheet: { backgroundColor: BG, borderTopLeftRadius: 26, borderTopRightRadius: 26, maxHeight: '75%', paddingBottom: 28 },
-  handle: { width: 42, height: 5, borderRadius: 3, backgroundColor: 'rgba(0,0,0,0.18)', alignSelf: 'center', marginTop: 10, marginBottom: 10 },
+  handle: { width: 42, height: 5, borderRadius: 3, backgroundColor: LINE_STRONG, alignSelf: 'center', marginTop: 10, marginBottom: 10 },
   title: { fontFamily: FONT_DISP, fontSize: 20, fontWeight: '800', color: INK, paddingHorizontal: 18, marginBottom: 10 },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10, paddingHorizontal: 16 },
   cell: { width: SIZE, height: SIZE, alignItems: 'center', justifyContent: 'center', borderRadius: 14, borderWidth: 2, borderColor: 'transparent' },
   cellSelected: { borderColor: INK },
-});
+}));

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
-  View, Text, StyleSheet, ScrollView, TouchableOpacity, SafeAreaView, Animated, Dimensions, LayoutAnimation,
+  View, Text, ScrollView, TouchableOpacity, SafeAreaView, Animated, Dimensions, LayoutAnimation,
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { WordsScreenProps } from '../../navigation/types';
@@ -12,6 +12,7 @@ import { speech } from '../../../infrastructure/speech/speech';
 import { playStep, sayText } from '../../utils/stepVoice';
 import { WordCategory } from '../../../core/domain/entities';
 import { T } from '../time/timeShared';
+import { SURFACE, SURFACE_ALT, LINE_STRONG, ACCENT_SOFT, DANGER, themedStyles } from '../../theme/tokens';
 
 type Props = WordsScreenProps<'SentenceBuilder'>;
 
@@ -179,7 +180,7 @@ export default function SentenceBuilderScreen({ navigation }: Props) {
               <MaterialCommunityIcons name="backspace-outline" size={20} color={T.INK} />
             </TouchableOpacity>
             <TouchableOpacity style={s.iconBtn} onPress={clear} accessibilityLabel="Borrar todo">
-              <MaterialCommunityIcons name="trash-can-outline" size={20} color="#B23B3B" />
+              <MaterialCommunityIcons name="trash-can-outline" size={20} color={DANGER} />
             </TouchableOpacity>
           </View>
         )}
@@ -197,7 +198,7 @@ export default function SentenceBuilderScreen({ navigation }: Props) {
 
       {/* Pestañas */}
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={s.tabs} contentContainerStyle={s.tabsRow}>
-        <TabChip label="Básicas" active={tab === 'core'} color={{ bg: '#FFFFFF', stroke: T.INK }} onPress={() => setTab('core')} />
+        <TabChip label="Básicas" active={tab === 'core'} color={{ bg: SURFACE, stroke: T.INK }} onPress={() => setTab('core')} />
         {WORD_SECTIONS.map(sec => (
           <TabChip key={sec.key} label={sec.title} active={tab === sec.key} color={sec} onPress={() => setTab(sec.key)} />
         ))}
@@ -234,21 +235,21 @@ function TabChip({ label, active, color, onPress }: { label: string; active: boo
   return (
     <TouchableOpacity
       onPress={onPress}
-      style={[s.tab, { backgroundColor: active ? color.bg : '#fff', borderColor: active ? T.INK : T.BORDER }, active && s.tabActive]}
+      style={[s.tab, { backgroundColor: active ? color.bg : SURFACE, borderColor: active ? T.INK : T.BORDER }, active && s.tabActive]}
     >
       <Text style={[s.tabText, { color: active ? color.stroke : T.INK3 }]}>{label}</Text>
     </TouchableOpacity>
   );
 }
 
-const s = StyleSheet.create({
+const s = themedStyles(() => ({
   safe: { flex: 1, backgroundColor: T.BG },
   top: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingTop: 8, paddingBottom: 10 },
   topBtn: {
     width: 44, height: 44, borderRadius: 12, backgroundColor: T.CARD,
     borderWidth: 1.5, borderColor: T.BORDER, alignItems: 'center', justifyContent: 'center',
   },
-  topBtnOn: { backgroundColor: T.ACCENT, borderColor: T.ACCENT },
+  topBtnOn: { backgroundColor: T.ACCENT_FILL, borderColor: T.ACCENT },
   topTitle: { fontFamily: T.FONT_DISP, fontSize: 20, fontWeight: '800', color: T.INK },
 
   strip: {
@@ -256,11 +257,11 @@ const s = StyleSheet.create({
     minHeight: 124, justifyContent: 'center', overflow: 'hidden',
   },
   stripEmpty: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 14, gap: 8, height: 118 },
-  ghost: { width: 48, height: 48, borderRadius: 12, borderWidth: 2, borderStyle: 'dashed', borderColor: 'rgba(0,0,0,0.2)' },
+  ghost: { width: 48, height: 48, borderRadius: 12, borderWidth: 2, borderStyle: 'dashed', borderColor: LINE_STRONG },
   stripHint: { flex: 1, fontFamily: T.FONT_BODY, fontSize: 13, fontWeight: '800', color: T.INK3, marginLeft: 4 },
   stripRow: { gap: 8, paddingHorizontal: 12, paddingTop: 12, paddingBottom: 6, alignItems: 'center' },
   piece: { alignItems: 'center', padding: 4, borderRadius: 14, borderWidth: 3, borderColor: 'transparent' },
-  pieceActive: { borderColor: T.ACCENT, backgroundColor: '#EAF1F7' },
+  pieceActive: { borderColor: T.ACCENT, backgroundColor: ACCENT_SOFT },
   pieceText: { fontFamily: T.FONT_BODY, fontSize: 12, fontWeight: '800', color: T.INK, marginTop: 3, maxWidth: 72 },
   stripFooter: {
     flexDirection: 'row', alignItems: 'center', gap: 8, paddingHorizontal: 12, paddingBottom: 10, paddingTop: 4,
@@ -268,11 +269,11 @@ const s = StyleSheet.create({
   },
   sentence: { flex: 1, fontFamily: T.FONT_DISP, fontSize: 17, fontWeight: '800', color: T.INK },
   iconBtn: {
-    width: 40, height: 40, borderRadius: 10, backgroundColor: '#F4F2EE', alignItems: 'center', justifyContent: 'center',
+    width: 40, height: 40, borderRadius: 10, backgroundColor: SURFACE_ALT, alignItems: 'center', justifyContent: 'center',
   },
 
   sayBtn: {
-    marginHorizontal: 16, marginTop: 10, height: 60, borderRadius: 16, backgroundColor: T.ACCENT,
+    marginHorizontal: 16, marginTop: 10, height: 60, borderRadius: 16, backgroundColor: T.ACCENT_FILL,
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 10,
   },
   sayBtnOff: { opacity: 0.35 },
@@ -295,4 +296,4 @@ const s = StyleSheet.create({
   cell: { width: TILE, alignItems: 'center' },
   cellText: { fontFamily: T.FONT_BODY, fontSize: 12, fontWeight: '800', color: T.INK, marginTop: 4 },
   boardEmpty: { fontFamily: T.FONT_BODY, fontSize: 14, fontWeight: '600', color: T.INK3, paddingVertical: 20 },
-});
+}));

@@ -22,8 +22,8 @@ export class FirebaseChildRepository extends FirebaseDataSource implements IChil
     return { id: ref.id, ...child };
   }
 
-  async update(id: string, data: Partial<Child>): Promise<Child> {
-    await this.updateDoc(COL, id, data as Record<string, unknown>);
+  async update(id: string, data: Partial<Omit<Child, 'id'>>): Promise<Child> {
+    await this.updateDoc(COL, id, ChildMapper.toFirestore(data as Omit<Child, 'id'>));
     const updated = await this.getById(id);
     return updated!;
   }

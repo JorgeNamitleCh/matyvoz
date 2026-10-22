@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { INK, INK3, BORDER, BG, FONT_DISP, FONT_BODY } from '../../theme/tokens';
+import { BG, SURFACE, INK, INK3, BORDER, LINE, PRIMARY, FONT_DISP, FONT_BODY, themedStyles } from '../../theme/tokens';
 
 /**
  * Selector de hora visual pensado para mamás/cuidadores: en vez de listas
@@ -127,7 +127,7 @@ export default function TimeOfDayPicker({ value, onChange }: Props) {
               key={p.key}
               style={[
                 s.periodTile,
-                { backgroundColor: active ? p.bg : '#fff', borderColor: active ? p.stroke : BORDER },
+                { backgroundColor: active ? p.bg : SURFACE, borderColor: active ? p.stroke : BORDER },
                 active && s.periodTileActive,
               ]}
               onPress={() => choosePeriod(p)}
@@ -149,7 +149,7 @@ export default function TimeOfDayPicker({ value, onChange }: Props) {
           return (
             <TouchableOpacity
               key={hour}
-              style={[s.hourBtn, active && { backgroundColor: INK, borderColor: INK }]}
+              style={[s.hourBtn, active && { backgroundColor: PRIMARY, borderColor: PRIMARY }]}
               onPress={() => set(hour, m)}
               accessibilityRole="button"
               accessibilityState={{ selected: active }}
@@ -167,7 +167,7 @@ export default function TimeOfDayPicker({ value, onChange }: Props) {
           return (
             <TouchableOpacity
               key={min}
-              style={[s.minuteBtn, active && { backgroundColor: INK, borderColor: INK }]}
+              style={[s.minuteBtn, active && { backgroundColor: PRIMARY, borderColor: PRIMARY }]}
               onPress={() => set(h, min)}
               accessibilityRole="button"
               accessibilityState={{ selected: active }}
@@ -183,15 +183,15 @@ export default function TimeOfDayPicker({ value, onChange }: Props) {
   );
 }
 
-const s = StyleSheet.create({
+const s = themedStyles(() => ({
   display: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
     borderRadius: 18, borderWidth: 2.5, paddingVertical: 14, paddingHorizontal: 12,
   },
   stepBtn: {
-    width: 52, height: 52, borderRadius: 26, backgroundColor: '#fff',
+    width: 52, height: 52, borderRadius: 26, backgroundColor: SURFACE,
     alignItems: 'center', justifyContent: 'center',
-    borderWidth: 1.5, borderColor: 'rgba(0,0,0,0.12)',
+    borderWidth: 1.5, borderColor: LINE,
   },
   displayCenter: { alignItems: 'center', flex: 1 },
   displayTime: { fontFamily: FONT_DISP, fontWeight: '800', fontSize: 46, lineHeight: 52 },
@@ -213,7 +213,7 @@ const s = StyleSheet.create({
   hourGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   hourBtn: {
     width: '31.5%', height: 60, borderRadius: 14,
-    backgroundColor: '#fff', borderWidth: 2, borderColor: BORDER,
+    backgroundColor: SURFACE, borderWidth: 2, borderColor: BORDER,
     alignItems: 'center', justifyContent: 'center',
   },
   hourText: { fontFamily: FONT_DISP, fontWeight: '800', fontSize: 26, color: INK },
@@ -226,4 +226,4 @@ const s = StyleSheet.create({
     alignItems: 'center', justifyContent: 'center',
   },
   minuteText: { fontFamily: FONT_BODY, fontWeight: '800', fontSize: 14, color: INK },
-});
+}));

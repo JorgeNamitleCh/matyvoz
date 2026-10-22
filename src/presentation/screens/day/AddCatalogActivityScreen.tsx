@@ -7,14 +7,10 @@ import { DayScreenProps } from '../../navigation/types';
 import PictoIcon, { CATEGORY_SWATCHES, ICON_CHOICES } from '../../components/pictograms/PictoIcon';
 import PictogramPicker, { PictogramMode } from '../../components/common/PictogramPicker';
 import { useCatalogStore } from '../../stores/useCatalogStore';
+import { SURFACE, SURFACE_ALT, INK, INK3, BORDER, LINE_STRONG, ACCENT, PRIMARY, FONT_DISP, FONT_BODY, themedStyles } from '../../theme/tokens';
 
 type Props = DayScreenProps<'AddCatalogActivity'>;
 
-const INK = '#2D2620';
-const BORDER = 'rgba(0,0,0,0.08)';
-const INK3 = '#8a8a8a';
-const FONT_DISP = 'Nunito ExtraLight';
-const FONT_BODY = 'Atkinson Hyperlegible';
 
 export default function AddCatalogActivityScreen({ navigation }: Props) {
   const categories = useCatalogStore(state => state.categories);
@@ -209,12 +205,12 @@ export default function AddCatalogActivityScreen({ navigation }: Props) {
   );
 }
 
-const s = StyleSheet.create({
+const s = themedStyles(() => ({
   safe: { flex: 1, backgroundColor: 'transparent' },
   backdrop: { flex: 1, backgroundColor: 'rgba(0,0,0,0.45)' },
 
   sheet: {
-    backgroundColor: '#fff',
+    backgroundColor: SURFACE,
     borderTopLeftRadius: 20, borderTopRightRadius: 20,
     paddingHorizontal: 18, paddingBottom: 22,
     maxHeight: '86%',
@@ -222,7 +218,7 @@ const s = StyleSheet.create({
     shadowOpacity: 0.15, shadowRadius: 20,
   },
   handle: {
-    width: 38, height: 4, backgroundColor: 'rgba(0,0,0,0.18)',
+    width: 38, height: 4, backgroundColor: LINE_STRONG,
     borderRadius: 2, alignSelf: 'center', marginTop: 12, marginBottom: 14,
   },
 
@@ -244,7 +240,7 @@ const s = StyleSheet.create({
   labelModalColor: { fontFamily: FONT_BODY, fontSize: 10, fontWeight: '800', letterSpacing: 0.5, color: INK3, marginBottom: 8, marginTop: 14 },
 
   nameInput: {
-    backgroundColor: '#EFEEEA', borderRadius: 12,
+    backgroundColor: SURFACE_ALT, borderRadius: 12,
     borderWidth: 1.5, borderColor: BORDER,
     paddingHorizontal: 14, paddingVertical: 12,
     fontFamily: FONT_BODY, fontSize: 14, color: INK,
@@ -261,10 +257,10 @@ const s = StyleSheet.create({
 
   newTypeChip: {
     paddingHorizontal: 12, paddingVertical: 8,
-    borderRadius: 999, backgroundColor: '#fff',
+    borderRadius: 999, backgroundColor: SURFACE,
     borderWidth: 1.5, borderColor: BORDER, borderStyle: 'dashed',
   },
-  newTypeChipText: { fontFamily: FONT_BODY, fontSize: 12, fontWeight: '700', color: '#2A5F8F' },
+  newTypeChipText: { fontFamily: FONT_BODY, fontSize: 12, fontWeight: '700', color: ACCENT },
 
   swatchRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   swatch: {
@@ -273,7 +269,7 @@ const s = StyleSheet.create({
   swatchActive: { borderWidth: 3, transform: [{ scale: 1.1 }] },
   createTypeBtn: {
     flex: 1, paddingVertical: 16, borderRadius: 14,
-    backgroundColor: INK, alignItems: 'center',
+    backgroundColor: PRIMARY, alignItems: 'center',
   },
 
   footer: { flexDirection: 'row', gap: 10, marginTop: 14 },
@@ -284,7 +280,7 @@ const s = StyleSheet.create({
   cancelText: { fontFamily: FONT_DISP, fontWeight: '800', fontSize: 15, color: INK },
   addBtn: {
     flex: 1.4, paddingVertical: 16, borderRadius: 14,
-    backgroundColor: INK, alignItems: 'center',
+    backgroundColor: PRIMARY, alignItems: 'center',
   },
   addBtnDisabled: { opacity: 0.4 },
   addText: { fontFamily: FONT_DISP, fontWeight: '800', fontSize: 15, color: '#fff' },
@@ -295,10 +291,10 @@ const s = StyleSheet.create({
   },
   modalCard: {
     width: '100%', maxWidth: 380,
-    backgroundColor: '#fff', borderRadius: 18, padding: 20,
+    backgroundColor: SURFACE, borderRadius: 18, padding: 20,
     shadowColor: '#000', shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.2, shadowRadius: 16,
   },
   modalTitle: { fontFamily: FONT_DISP, fontSize: 18, fontWeight: '800', color: INK, marginBottom: 14 },
   modalFooter: { flexDirection: 'row', gap: 10, marginTop: 18 },
-});
+}));

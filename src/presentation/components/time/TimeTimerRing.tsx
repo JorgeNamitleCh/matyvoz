@@ -1,6 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import Svg, { Circle, Line } from 'react-native-svg';
+import { SURFACE } from '../../theme/tokens';
 
 interface Props {
   /** Fracción restante 0–1 */
@@ -41,7 +42,7 @@ export default function TimeTimerRing({
     <View style={{ width: size, height: size, alignItems: 'center', justifyContent: 'center' }}>
       <Svg width={size} height={size} style={{ position: 'absolute', top: 0, left: 0 }}>
         {/* Fondo blanco */}
-        <Circle cx={c} cy={c} r={rOuter} fill="#fff" />
+        <Circle cx={c} cy={c} r={rOuter} fill={SURFACE} />
         {/* Banda roja (tiempo restante) */}
         {p > 0 && (
           <Circle
@@ -59,7 +60,7 @@ export default function TimeTimerRing({
         {/* Aro exterior */}
         <Circle cx={c} cy={c} r={rOuter} stroke={ink} strokeWidth={outerStroke} fill="none" />
         {/* Círculo interior */}
-        <Circle cx={c} cy={c} r={rInner} stroke={ink} strokeWidth={Math.max(1.5, outerStroke * 0.45)} fill="#fff" />
+        <Circle cx={c} cy={c} r={rInner} stroke={ink} strokeWidth={Math.max(1.5, outerStroke * 0.45)} fill={SURFACE} />
         {/* Marca "+" arriba */}
         {showTick && (
           <>

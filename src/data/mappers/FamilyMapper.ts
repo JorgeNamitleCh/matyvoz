@@ -6,6 +6,7 @@ export const FamilyMapper = {
       id,
       name: data.name,
       email: data.email,
+      role: data.role ?? undefined,
       createdAt: data.createdAt?.toDate?.() ?? new Date(),
     };
   },

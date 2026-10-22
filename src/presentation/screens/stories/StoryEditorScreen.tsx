@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import {
-  View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, TextInput, Image,
+  View, Text, TouchableOpacity, SafeAreaView, ScrollView, TextInput, Image,
   KeyboardAvoidingView, Platform, LayoutAnimation,
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -14,6 +14,7 @@ import { pickImageFromCamera, pickImageFromLibrary } from '../../utils/pickActiv
 import { KIND_META, KIND_ORDER, supportColor } from '../../utils/storyKinds';
 import { Story, StoryStep } from '../../../core/domain/entities';
 import { T } from '../time/timeShared';
+import { SURFACE, SURFACE_ALT, LINE_STRONG, DANGER, OK_SOFT, themedStyles } from '../../theme/tokens';
 
 type Props = StoriesScreenProps<'StoryEditor'>;
 
@@ -230,7 +231,7 @@ export default function StoryEditorScreen({ navigation, route }: Props) {
                 <TouchableOpacity
                   key={k}
                   onPress={() => patchStep({ kind: k })}
-                  style={[s.kindChip, { backgroundColor: active ? km.bg : '#fff', borderColor: active ? km.stroke : T.BORDER }]}
+                  style={[s.kindChip, { backgroundColor: active ? km.bg : SURFACE, borderColor: active ? km.stroke : T.BORDER }]}
                 >
                   <Text style={[s.kindText, { color: active ? km.stroke : T.INK3 }]}>{km.label}</Text>
                 </TouchableOpacity>
@@ -308,7 +309,7 @@ export default function StoryEditorScreen({ navigation, route }: Props) {
           <Text style={s.footText}>{step.audioUrl ? 'Audio ✓' : 'Grabar audio'}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={s.trashBtn} onPress={deleteStep} accessibilityLabel="Eliminar paso">
-          <MaterialCommunityIcons name="trash-can-outline" size={20} color="#B23B3B" />
+          <MaterialCommunityIcons name="trash-can-outline" size={20} color={DANGER} />
         </TouchableOpacity>
       </View>
 
@@ -350,7 +351,7 @@ function MediaBtn({ icon, label, onPress }: { icon: string; label: string; onPre
   );
 }
 
-const s = StyleSheet.create({
+const s = themedStyles(() => ({
   safe: { flex: 1, backgroundColor: T.BG },
   flex: { flex: 1 },
   mt: { marginTop: 18 },
@@ -364,7 +365,7 @@ const s = StyleSheet.create({
   backBtn: { flexDirection: 'row', alignItems: 'center', width: 96 },
   backText: { fontFamily: T.FONT_BODY, fontSize: 14, fontWeight: '700', color: T.INK },
   topTitle: { fontFamily: T.FONT_BODY, fontSize: 16, fontWeight: '800', color: T.INK },
-  saveBtn: { width: 96, height: 38, borderRadius: 10, backgroundColor: T.INK, alignItems: 'center', justifyContent: 'center' },
+  saveBtn: { width: 96, height: 38, borderRadius: 10, backgroundColor: T.PRIMARY, alignItems: 'center', justifyContent: 'center' },
   saveText: { fontFamily: T.FONT_DISP, fontSize: 14, fontWeight: '800', color: '#fff' },
 
   content: { paddingHorizontal: 16, paddingTop: 14, paddingBottom: 24 },
@@ -380,13 +381,13 @@ const s = StyleSheet.create({
   stepTileActive: { borderColor: T.ACCENT },
   stepImg: { width: 52, height: 52, borderRadius: 11, borderWidth: 2.5 },
   stepNum: {
-    position: 'absolute', top: -8, left: -8, minWidth: 20, height: 20, borderRadius: 10, backgroundColor: '#fff',
+    position: 'absolute', top: -8, left: -8, minWidth: 20, height: 20, borderRadius: 10, backgroundColor: SURFACE,
     borderWidth: 1.5, borderColor: T.INK, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 4,
   },
-  stepNumActive: { backgroundColor: T.ACCENT, borderColor: T.ACCENT },
+  stepNumActive: { backgroundColor: T.ACCENT_FILL, borderColor: T.ACCENT },
   stepNumText: { fontFamily: T.FONT_BODY, fontSize: 10, fontWeight: '800', color: T.INK },
   addTile: {
-    width: 56, height: 56, borderRadius: 13, borderWidth: 2, borderStyle: 'dashed', borderColor: 'rgba(0,0,0,0.25)',
+    width: 56, height: 56, borderRadius: 13, borderWidth: 2, borderStyle: 'dashed', borderColor: LINE_STRONG,
     alignItems: 'center', justifyContent: 'center', marginLeft: 2,
   },
   divider: { height: 1, backgroundColor: T.BORDER, marginVertical: 14 },
@@ -424,10 +425,10 @@ const s = StyleSheet.create({
   supportRow: { flexDirection: 'row', gap: 12, flexWrap: 'wrap', paddingTop: 4 },
   removeDot: {
     position: 'absolute', top: -6, right: -6, width: 18, height: 18, borderRadius: 9,
-    backgroundColor: T.INK, alignItems: 'center', justifyContent: 'center',
+    backgroundColor: T.PRIMARY, alignItems: 'center', justifyContent: 'center',
   },
   addSupport: {
-    width: 50, height: 50, borderRadius: 11, borderWidth: 2, borderStyle: 'dashed', borderColor: 'rgba(0,0,0,0.25)',
+    width: 50, height: 50, borderRadius: 11, borderWidth: 2, borderStyle: 'dashed', borderColor: LINE_STRONG,
     alignItems: 'center', justifyContent: 'center',
   },
 
@@ -436,16 +437,16 @@ const s = StyleSheet.create({
     backgroundColor: T.BG, borderTopWidth: 1, borderTopColor: T.BORDER,
   },
   footBtn: {
-    height: 48, borderRadius: 12, backgroundColor: '#E6E3DD',
+    height: 48, borderRadius: 12, backgroundColor: SURFACE_ALT,
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6,
   },
-  footBtnOn: { backgroundColor: '#D8EEDC' },
+  footBtnOn: { backgroundColor: OK_SOFT },
   micBadge: {
     position: 'absolute', bottom: -4, right: -4, width: 18, height: 18, borderRadius: 9,
-    backgroundColor: '#2E7D4F', alignItems: 'center', justifyContent: 'center', borderWidth: 1.5, borderColor: '#fff',
+    backgroundColor: '#2E7D4F', alignItems: 'center', justifyContent: 'center', borderWidth: 1.5, borderColor: SURFACE,
   },
   footText: { fontFamily: T.FONT_BODY, fontSize: 13, fontWeight: '800', color: T.INK },
   trashBtn: {
-    width: 48, height: 48, borderRadius: 12, backgroundColor: '#E6E3DD', alignItems: 'center', justifyContent: 'center',
+    width: 48, height: 48, borderRadius: 12, backgroundColor: SURFACE_ALT, alignItems: 'center', justifyContent: 'center',
   },
-});
+}));

@@ -1,0 +1,39 @@
+diff --git a/node_modules/react-native/Libraries/Components/TextInput/TextInput.js b/node_modules/react-native/Libraries/Components/TextInput/TextInput.js
+index e1d5ca1..294f7e5 100644
+--- a/node_modules/react-native/Libraries/Components/TextInput/TextInput.js
++++ b/node_modules/react-native/Libraries/Components/TextInput/TextInput.js
+@@ -904,6 +904,8 @@ const TextInput: component(
+ ) = function TextInput({
+   ref: forwardedRef,
+   allowFontScaling = true,
++  // MatyVoz: mismo tope de 200 % que Text.
++  maxFontSizeMultiplier = 2,
+   rejectResponderTermination = true,
+   underlineColorAndroid = 'transparent',
+   autoComplete,
+@@ -923,6 +925,7 @@ const TextInput: component(
+   return (
+     <InternalTextInput
+       allowFontScaling={allowFontScaling}
++      maxFontSizeMultiplier={maxFontSizeMultiplier}
+       rejectResponderTermination={rejectResponderTermination}
+       underlineColorAndroid={underlineColorAndroid}
+       editable={readOnly !== undefined ? !readOnly : editable}
+diff --git a/node_modules/react-native/Libraries/Text/Text.js b/node_modules/react-native/Libraries/Text/Text.js
+index 5a1e760..028904e 100644
+--- a/node_modules/react-native/Libraries/Text/Text.js
++++ b/node_modules/react-native/Libraries/Text/Text.js
+@@ -287,6 +287,13 @@ const TextImpl: component(
+ 
+   processedProps.accessible = _accessible;
+   processedProps.allowFontScaling = allowFontScaling !== false;
++  // MatyVoz: el texto crece con el tamaño del sistema hasta 200 % (criterio
++  // "Larger Text" de App Store) sin romper el diseño en los tamaños extremos.
++  // Los títulos (24 px o más) ya son grandes: crecen hasta 140 %, como en iOS.
++  if (processedProps.maxFontSizeMultiplier == null) {
++    const baseSize = processedStyle?.fontSize ?? 14;
++    processedProps.maxFontSizeMultiplier = baseSize >= 24 ? 1.4 : 2;
++  }
+   processedProps.disabled = _disabled;
+   processedProps.ellipsizeMode = ellipsizeMode ?? 'tail';
+   processedProps.children = children;

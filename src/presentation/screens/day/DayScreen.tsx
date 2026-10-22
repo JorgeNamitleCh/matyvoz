@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import {
-  View, Text, ScrollView, TouchableOpacity, StyleSheet, SafeAreaView,
+  View, Text, ScrollView, TouchableOpacity, SafeAreaView,
   Animated, LayoutAnimation, ActivityIndicator,
 } from 'react-native';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
@@ -13,18 +13,11 @@ import TimeEditModal from '../../components/common/TimeEditModal';
 import { formatShortTime } from '../../components/common/TimeOfDayPicker';
 import EmptyDayState from '../../components/day/EmptyDayState';
 import DayCardsView from '../../components/day/DayCardsView';
+import ProfileButton from '../../components/common/ProfileButton';
+import { BG, SURFACE, INK, INK2, INK3, BORDER, LINE, LINE_STRONG, ACCENT, ACCENT_SOFT, ACCENT_FILL, PRIMARY, DANGER_FILL, FONT_DISP, FONT_BODY, themedStyles } from '../../theme/tokens';
 
 type Props = DayScreenProps<'Day'>;
 
-const BG = '#EFEEEA';
-const INK = '#2D2620';
-const ACCENT = '#2A5F8F';
-const DANGER = '#B23B3B';
-const BORDER = 'rgba(0,0,0,0.08)';
-const INK3 = '#8a8a8a';
-const INK2 = '#4a4a4a';
-const FONT_DISP = 'Nunito ExtraLight';
-const FONT_BODY = 'Atkinson Hyperlegible';
 
 const DAYS   = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
 const MONTHS = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
@@ -101,11 +94,11 @@ export default function DayScreen({ navigation }: Props) {
     });
     return (
       <Animated.View style={[s.actions, { transform: [{ translateX }] }]}>
-        <TouchableOpacity style={[s.actionBtn, { backgroundColor: ACCENT }]} onPress={() => startReorder(it.id)}>
+        <TouchableOpacity style={[s.actionBtn, { backgroundColor: ACCENT_FILL }]} onPress={() => startReorder(it.id)}>
           <MaterialCommunityIcons name="swap-vertical" size={22} color="#fff" />
           <Text style={s.actionText}>Ordenar</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[s.actionBtn, { backgroundColor: DANGER }]} onPress={() => confirmDelete(it)}>
+        <TouchableOpacity style={[s.actionBtn, { backgroundColor: DANGER_FILL }]} onPress={() => confirmDelete(it)}>
           <MaterialCommunityIcons name="trash-can-outline" size={22} color="#fff" />
           <Text style={s.actionText}>Eliminar</Text>
         </TouchableOpacity>
@@ -127,28 +120,31 @@ export default function DayScreen({ navigation }: Props) {
             <Text style={s.doneBtnText}>Listo</Text>
           </TouchableOpacity>
         ) : (
-          <View style={s.viewToggle}>
-            {([
-              { mode: 'list', icon: 'format-list-bulleted', a11y: 'Vista lista' },
-              { mode: 'cards', icon: 'view-agenda-outline', a11y: 'Vista tarjetas' },
-            ] as const).map(opt => {
-              const active = viewMode === opt.mode;
-              return (
-                <TouchableOpacity
-                  key={opt.mode}
-                  style={[s.toggleBtn, active && s.toggleBtnActive]}
-                  onPress={() => {
-                    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-                    closeRow(openRowId.current);
-                    setViewMode(opt.mode);
-                  }}
-                  accessibilityLabel={opt.a11y}
-                  accessibilityState={{ selected: active }}
-                >
-                  <MaterialCommunityIcons name={opt.icon} size={20} color={active ? '#fff' : INK} />
-                </TouchableOpacity>
-              );
-            })}
+          <View style={s.headerRight}>
+            <View style={s.viewToggle}>
+              {([
+                { mode: 'list', icon: 'format-list-bulleted', a11y: 'Vista lista' },
+                { mode: 'cards', icon: 'view-agenda-outline', a11y: 'Vista tarjetas' },
+              ] as const).map(opt => {
+                const active = viewMode === opt.mode;
+                return (
+                  <TouchableOpacity
+                    key={opt.mode}
+                    style={[s.toggleBtn, active && s.toggleBtnActive]}
+                    onPress={() => {
+                      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+                      closeRow(openRowId.current);
+                      setViewMode(opt.mode);
+                    }}
+                    accessibilityLabel={opt.a11y}
+                    accessibilityState={{ selected: active }}
+                  >
+                    <MaterialCommunityIcons name={opt.icon} size={20} color={active ? '#fff' : INK} />
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+            <ProfileButton />
           </View>
         )}
       </View>
@@ -159,9 +155,9 @@ export default function DayScreen({ navigation }: Props) {
         {items.map(it => (
           <View key={it.id} style={[
             s.progressChip,
-            it.state === 'done'  ? { backgroundColor: INK } :
+            it.state === 'done'  ? { backgroundColor: PRIMARY } :
             it.state === 'now'   ? { backgroundColor: ACCENT } :
-            { backgroundColor: 'rgba(0,0,0,0.10)' },
+            { backgroundColor: LINE },
           ]} />
         ))}
       </View>
@@ -286,9 +282,9 @@ export default function DayScreen({ navigation }: Props) {
             <View key={it.id} style={s.row}>
               <View style={s.bulletCol}>
                 <View style={
-                  done ? { width: 14, height: 14, borderRadius: 7, backgroundColor: INK, borderColor: INK, borderWidth: 3 } :
-                  now  ? { width: 22, height: 22, borderRadius: 11, backgroundColor: '#fff', borderColor: ACCENT, borderWidth: 4 } :
-                  { width: 14, height: 14, borderRadius: 7, backgroundColor: '#fff', borderColor: 'rgba(0,0,0,0.18)', borderWidth: 3 }
+                  done ? { width: 14, height: 14, borderRadius: 7, backgroundColor: PRIMARY, borderColor: PRIMARY, borderWidth: 3 } :
+                  now  ? { width: 22, height: 22, borderRadius: 11, backgroundColor: SURFACE, borderColor: ACCENT, borderWidth: 4 } :
+                  { width: 14, height: 14, borderRadius: 7, backgroundColor: SURFACE, borderColor: LINE_STRONG, borderWidth: 3 }
                 } />
               </View>
 
@@ -341,7 +337,7 @@ export default function DayScreen({ navigation }: Props) {
 
 const BULLET_COL = 36;
 
-const s = StyleSheet.create({
+const s = themedStyles(() => ({
   safe: { flex: 1, backgroundColor: BG },
   header: {
     flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end',
@@ -349,14 +345,15 @@ const s = StyleSheet.create({
   },
   dateLabel: { fontFamily: FONT_BODY, fontSize: 11, color: INK3, fontWeight: '800', letterSpacing: 0.5 },
   title: { fontFamily: FONT_DISP, fontSize: 26, fontWeight: '800', color: INK },
+  headerRight: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   viewToggle: {
-    flexDirection: 'row', backgroundColor: '#fff', borderRadius: 12, padding: 3,
+    flexDirection: 'row', backgroundColor: SURFACE, borderRadius: 12, padding: 3,
     borderWidth: 1.5, borderColor: BORDER,
   },
   toggleBtn: { width: 40, height: 36, borderRadius: 9, alignItems: 'center', justifyContent: 'center' },
-  toggleBtnActive: { backgroundColor: INK },
+  toggleBtnActive: { backgroundColor: PRIMARY },
   doneBtn: {
-    height: 40, paddingHorizontal: 14, borderRadius: 10, backgroundColor: ACCENT,
+    height: 40, paddingHorizontal: 14, borderRadius: 10, backgroundColor: ACCENT_FILL,
     flexDirection: 'row', alignItems: 'center', gap: 6,
   },
   doneBtnText: { fontFamily: FONT_DISP, fontSize: 14, fontWeight: '800', color: '#fff' },
@@ -376,7 +373,7 @@ const s = StyleSheet.create({
     position: 'absolute',
     left: 14 + BULLET_COL / 2 - 1,
     top: 14, bottom: 14, width: 3,
-    backgroundColor: 'rgba(0,0,0,0.08)', borderRadius: 2,
+    backgroundColor: BORDER, borderRadius: 2,
   },
 
   timelineEmpty: { flexGrow: 1, paddingBottom: 24 },
@@ -389,7 +386,7 @@ const s = StyleSheet.create({
   swipeContainer: { borderRadius: 12 },
 
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: SURFACE,
     borderRadius: 12, borderWidth: 1.5, borderColor: BORDER,
     overflow: 'hidden', flexDirection: 'row',
   },
@@ -402,7 +399,7 @@ const s = StyleSheet.create({
   timeRow: { flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 2 },
   timeChip: {
     flexDirection: 'row', alignItems: 'center', gap: 4,
-    backgroundColor: '#EAF1F7', borderRadius: 8,
+    backgroundColor: ACCENT_SOFT, borderRadius: 8,
     paddingHorizontal: 8, paddingVertical: 3,
   },
   timeText: { fontFamily: FONT_DISP, fontSize: 14, fontWeight: '800', color: ACCENT },
@@ -411,7 +408,7 @@ const s = StyleSheet.create({
   actName: { fontFamily: FONT_DISP, fontSize: 17, fontWeight: '800', color: INK },
   subText: { fontFamily: FONT_BODY, fontSize: 11, color: INK3, fontWeight: '600', marginTop: 2 },
 
-  ahoraBtn: { backgroundColor: ACCENT, borderRadius: 6, paddingHorizontal: 8, paddingVertical: 4 },
+  ahoraBtn: { backgroundColor: ACCENT_FILL, borderRadius: 6, paddingHorizontal: 8, paddingVertical: 4 },
   ahoraBtnText: { fontFamily: FONT_DISP, fontSize: 10, fontWeight: '800', color: '#fff', letterSpacing: 0.5 },
   checkText: { fontSize: 18, color: INK, fontWeight: '800', paddingRight: 4 },
 
@@ -433,10 +430,10 @@ const s = StyleSheet.create({
   fab: {
     position: 'absolute', bottom: 16, right: 16,
     height: 50, paddingHorizontal: 18, borderRadius: 25,
-    backgroundColor: INK, flexDirection: 'row', alignItems: 'center', gap: 8,
+    backgroundColor: PRIMARY, flexDirection: 'row', alignItems: 'center', gap: 8,
     shadowColor: '#000', shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25, shadowRadius: 8, elevation: 6,
   },
   fabPlus: { fontSize: 20, color: '#fff', lineHeight: 22 },
   fabText: { fontFamily: FONT_DISP, fontWeight: '800', fontSize: 14, color: '#fff' },
-});
+}));

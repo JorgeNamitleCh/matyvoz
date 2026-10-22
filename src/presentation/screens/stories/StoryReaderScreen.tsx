@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
-  View, Text, StyleSheet, TouchableOpacity, SafeAreaView, Image, Animated, StatusBar, Dimensions,
+  View, Text, TouchableOpacity, SafeAreaView, Image, Animated, StatusBar, Dimensions,
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { StoriesScreenProps } from '../../navigation/types';
@@ -10,11 +10,14 @@ import { KIND_META, supportColor } from '../../utils/storyKinds';
 import { speech } from '../../../infrastructure/speech/speech';
 import { playStep, stopVoice, sayText } from '../../utils/stepVoice';
 import { T } from '../time/timeShared';
+import { themedStyles } from '../../theme/tokens';
 
 type Props = StoriesScreenProps<'StoryReader'>;
 
 const DARK = '#0B0B0D';
 const DARK_BTN = '#1E1E22';
+/** El lector en modo niño es siempre negro con botones blancos, en ambos modos. */
+const WHITE = '#FFFFFF';
 const MEDIA_H = Math.min(Dimensions.get('window').width - 32, Dimensions.get('window').height * 0.38);
 
 /** Lector en modo niño: fondo negro, texto grande, sin distracciones. */
@@ -181,7 +184,7 @@ export default function StoryReaderScreen({ navigation, route }: Props) {
   );
 }
 
-const s = StyleSheet.create({
+const s = themedStyles(() => ({
   safe: { flex: 1, backgroundColor: DARK },
   flex: { flex: 1 },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 14, paddingHorizontal: 24 },
@@ -192,12 +195,12 @@ const s = StyleSheet.create({
 
   progress: { flexDirection: 'row', gap: 5, paddingHorizontal: 16, marginBottom: 16 },
   seg: { flex: 1, height: 4, borderRadius: 2, backgroundColor: 'rgba(255,255,255,0.22)' },
-  segOn: { backgroundColor: '#fff' },
+  segOn: { backgroundColor: WHITE },
 
   stage: { flex: 1, paddingHorizontal: 16, alignItems: 'center' },
   card: {
     width: '100%', borderRadius: 22, overflow: 'hidden',
-    borderWidth: 2, borderColor: 'rgba(255,255,255,0.18)', backgroundColor: '#fff',
+    borderWidth: 2, borderColor: 'rgba(255,255,255,0.18)', backgroundColor: WHITE,
   },
   cardHead: { backgroundColor: '#17151C', paddingHorizontal: 14, paddingVertical: 8 },
   cardHeadText: { fontFamily: T.FONT_BODY, fontSize: 11, fontWeight: '800', letterSpacing: 1.2, color: '#fff' },
@@ -218,11 +221,11 @@ const s = StyleSheet.create({
   doneSub: { fontFamily: T.FONT_BODY, fontSize: 16, fontWeight: '700', color: 'rgba(255,255,255,0.7)' },
 
   controls: { flexDirection: 'row', gap: 10, paddingHorizontal: 16, paddingBottom: 14, paddingTop: 10 },
-  square: { width: 62, height: 62, borderRadius: 16, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center' },
+  square: { width: 62, height: 62, borderRadius: 16, backgroundColor: WHITE, alignItems: 'center', justifyContent: 'center' },
   disabled: { opacity: 0.35 },
   pill: {
-    height: 62, borderRadius: 16, backgroundColor: '#fff', paddingHorizontal: 18,
+    height: 62, borderRadius: 16, backgroundColor: WHITE, paddingHorizontal: 18,
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,
   },
   pillText: { fontFamily: T.FONT_DISP, fontSize: 18, fontWeight: '800', color: DARK },
-});
+}));

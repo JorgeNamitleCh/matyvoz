@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { View, Text, TouchableOpacity, Image } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import PictoIcon, { ICON_CHOICES } from '../pictograms/PictoIcon';
 import { pickImageFromCamera, pickImageFromLibrary } from '../../utils/pickActivityImage';
 import { useDialog } from '../../providers/DialogProvider';
-import { INK, ACCENT, BORDER, BG, FONT_BODY } from '../../theme/tokens';
+import { BG, SURFACE, INK, INK3, BORDER, ACCENT, PRIMARY, FONT_BODY, themedStyles } from '../../theme/tokens';
 
 export type PictogramMode = 'icon' | 'image';
 
@@ -134,16 +134,16 @@ export default function PictogramPicker({
   );
 }
 
-const s = StyleSheet.create({
-  label: { fontFamily: FONT_BODY, fontSize: 10, fontWeight: '800', letterSpacing: 0.5, color: '#8a8a8a', marginBottom: 8 },
+const s = themedStyles(() => ({
+  label: { fontFamily: FONT_BODY, fontSize: 10, fontWeight: '800', letterSpacing: 0.5, color: INK3, marginBottom: 8 },
 
   modeRow: { flexDirection: 'row', gap: 8, marginBottom: 12 },
   modeChip: {
     flexDirection: 'row', alignItems: 'center', gap: 6,
     paddingHorizontal: 14, paddingVertical: 9, borderRadius: 999,
-    backgroundColor: '#fff', borderWidth: 1.5, borderColor: BORDER,
+    backgroundColor: SURFACE, borderWidth: 1.5, borderColor: BORDER,
   },
-  modeChipActive: { backgroundColor: INK, borderColor: INK },
+  modeChipActive: { backgroundColor: PRIMARY, borderColor: PRIMARY },
   modeChipText: { fontFamily: FONT_BODY, fontSize: 13, fontWeight: '700', color: INK },
   modeChipTextActive: { color: '#fff' },
 
@@ -179,4 +179,4 @@ const s = StyleSheet.create({
     alignItems: 'center', justifyContent: 'center',
   },
   imagePreviewActions: { gap: 8 },
-});
+}));

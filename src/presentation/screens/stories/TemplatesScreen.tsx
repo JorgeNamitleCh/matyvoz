@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, SafeAreaView, Dimensions } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, SafeAreaView, Dimensions } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { StoriesScreenProps } from '../../navigation/types';
 import PictoIcon from '../../components/pictograms/PictoIcon';
@@ -8,6 +8,7 @@ import { StoryCategory } from '../../../core/domain/entities';
 import { useStoriesStore } from '../../stores/useStoriesStore';
 import { KIND_META } from '../../utils/storyKinds';
 import { T } from '../time/timeShared';
+import { themedStyles } from '../../theme/tokens';
 
 type Props = StoriesScreenProps<'Templates'>;
 
@@ -78,7 +79,7 @@ export default function TemplatesScreen({ navigation }: Props) {
   );
 }
 
-const s = StyleSheet.create({
+const s = themedStyles(() => ({
   safe: { flex: 1, backgroundColor: T.BG },
   header: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: 16, paddingTop: 8, paddingBottom: 12 },
   backBtn: {
@@ -94,7 +95,7 @@ const s = StyleSheet.create({
     paddingHorizontal: 14, paddingVertical: 7, borderRadius: 999,
     backgroundColor: T.CARD, borderWidth: 1.5, borderColor: T.BORDER,
   },
-  chipActive: { backgroundColor: T.INK, borderColor: T.INK },
+  chipActive: { backgroundColor: T.PRIMARY, borderColor: T.PRIMARY },
   chipText: { fontFamily: T.FONT_BODY, fontSize: 12, fontWeight: '800', color: T.INK },
   chipTextActive: { color: '#fff' },
 
@@ -107,6 +108,6 @@ const s = StyleSheet.create({
   cardSub: { fontFamily: T.FONT_BODY, fontSize: 9, fontWeight: '800', letterSpacing: 0.6, color: T.INK3, marginTop: 4 },
 
   footer: { paddingHorizontal: 16, paddingBottom: 14, paddingTop: 6 },
-  scratchBtn: { height: 56, borderRadius: 14, backgroundColor: T.INK, alignItems: 'center', justifyContent: 'center' },
+  scratchBtn: { height: 56, borderRadius: 14, backgroundColor: T.PRIMARY, alignItems: 'center', justifyContent: 'center' },
   scratchText: { fontFamily: T.FONT_DISP, fontSize: 16, fontWeight: '800', color: '#fff' },
-});
+}));

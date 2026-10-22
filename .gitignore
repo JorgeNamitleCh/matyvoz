@@ -82,3 +82,6 @@ ios/MatyVoz/GoogleService-Info.plist
 _to_delete/
 Claude outputs/
 .claude/
+
+# Caché de Firebase CLI (deploy de hosting)
+.firebase/

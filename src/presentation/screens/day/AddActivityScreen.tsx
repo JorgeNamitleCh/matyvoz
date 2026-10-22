@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import {
-  View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, SafeAreaView, LayoutAnimation,
+  View, Text, TextInput, TouchableOpacity, ScrollView, SafeAreaView, LayoutAnimation,
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DayScreenProps } from '../../navigation/types';
@@ -11,17 +11,10 @@ import { useCatalogStore } from '../../stores/useCatalogStore';
 import { useDayStore } from '../../stores/useDayStore';
 import { useDialog } from '../../providers/DialogProvider';
 import { ActivityRecurrence } from '../../../core/domain/entities';
+import { BG, SURFACE, INK, INK3, BORDER, LINE_STRONG, ACCENT, ACCENT_FILL, PRIMARY, DANGER, DANGER_BG, FONT_DISP, FONT_BODY, themedStyles } from '../../theme/tokens';
 
 type Props = DayScreenProps<'AddActivity'>;
 
-const INK = '#2D2620';
-const ACCENT = '#2A5F8F';
-const BORDER = 'rgba(0,0,0,0.08)';
-const INK3 = '#8a8a8a';
-const BG = '#EFEEEA';
-const DANGER = '#B23B3B';
-const FONT_DISP = 'Nunito ExtraLight';
-const FONT_BODY = 'Atkinson Hyperlegible';
 
 const RECURRENCES: { key: ActivityRecurrence; label: string; hint: string; icon: string }[] = [
   { key: 'once',     label: 'Solo hoy',      hint: 'Una vez',           icon: 'calendar-today' },
@@ -219,7 +212,7 @@ export default function AddActivityScreen({ route, navigation }: Props) {
             <PictoIcon
               kind={iconKey}
               imageUri={mode === 'image' ? imageUri : undefined}
-              color={{ bg: '#fff', stroke: cat.stroke }}
+              color={{ bg: '#FFFFFF', stroke: cat.stroke }}
               size={92}
               hideLabel
             />
@@ -336,7 +329,7 @@ export default function AddActivityScreen({ route, navigation }: Props) {
   );
 }
 
-const s = StyleSheet.create({
+const s = themedStyles(() => ({
   safe: { flex: 1, backgroundColor: 'transparent' },
   backdrop: { flex: 1, minHeight: 40, backgroundColor: 'rgba(0,0,0,0.45)' },
 
@@ -348,7 +341,7 @@ const s = StyleSheet.create({
     shadowOpacity: 0.15, shadowRadius: 20, elevation: 12,
   },
   handle: {
-    width: 42, height: 5, backgroundColor: 'rgba(0,0,0,0.18)',
+    width: 42, height: 5, backgroundColor: LINE_STRONG,
     borderRadius: 3, alignSelf: 'center', marginTop: 10, marginBottom: 6,
   },
 
@@ -358,11 +351,11 @@ const s = StyleSheet.create({
   },
   topTitle: { fontFamily: FONT_DISP, fontSize: 18, fontWeight: '800', color: INK },
   roundBtn: {
-    width: 42, height: 42, borderRadius: 21, backgroundColor: '#fff',
+    width: 42, height: 42, borderRadius: 21, backgroundColor: SURFACE,
     alignItems: 'center', justifyContent: 'center',
     borderWidth: 1.5, borderColor: BORDER,
   },
-  trashBtn: { backgroundColor: '#FBEAEA', borderColor: 'rgba(178,59,59,0.25)' },
+  trashBtn: { backgroundColor: DANGER_BG, borderColor: 'rgba(178,59,59,0.25)' },
 
   content: { paddingHorizontal: 16, paddingBottom: 16, gap: 12 },
 
@@ -381,22 +374,22 @@ const s = StyleSheet.create({
   },
   changeBtn: {
     alignSelf: 'flex-start', flexDirection: 'row', alignItems: 'center', gap: 6,
-    backgroundColor: '#fff', borderRadius: 999, paddingHorizontal: 12, paddingVertical: 7, marginTop: 6,
+    backgroundColor: SURFACE, borderRadius: 999, paddingHorizontal: 12, paddingVertical: 7, marginTop: 6,
   },
   changeText: { fontFamily: FONT_BODY, fontSize: 13, fontWeight: '800', color: INK },
 
   pictoBox: {
-    backgroundColor: '#fff', borderRadius: 20, padding: 14,
+    backgroundColor: SURFACE, borderRadius: 20, padding: 14,
     borderWidth: 1.5, borderColor: BORDER,
   },
 
   step: {
-    backgroundColor: '#fff', borderRadius: 20, padding: 16,
+    backgroundColor: SURFACE, borderRadius: 20, padding: 16,
     borderWidth: 1.5, borderColor: BORDER,
   },
   stepHeader: { flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 14 },
   stepNum: {
-    width: 30, height: 30, borderRadius: 15, backgroundColor: ACCENT,
+    width: 30, height: 30, borderRadius: 15, backgroundColor: ACCENT_FILL,
     alignItems: 'center', justifyContent: 'center',
   },
   stepNumText: { fontFamily: FONT_DISP, fontSize: 16, fontWeight: '800', color: '#fff' },
@@ -408,7 +401,7 @@ const s = StyleSheet.create({
     backgroundColor: BG, borderWidth: 2, borderColor: BORDER,
     alignItems: 'center', justifyContent: 'center', gap: 4, padding: 10,
   },
-  recTileActive: { backgroundColor: INK, borderColor: INK },
+  recTileActive: { backgroundColor: PRIMARY, borderColor: PRIMARY },
   recLabel: { fontFamily: FONT_DISP, fontSize: 16, fontWeight: '800', color: INK, textAlign: 'center' },
   recHint: { fontFamily: FONT_BODY, fontSize: 12, fontWeight: '600', color: INK3, textAlign: 'center' },
   textOnDark: { color: '#fff' },
@@ -420,7 +413,7 @@ const s = StyleSheet.create({
     borderWidth: 1.5, borderColor: BORDER,
   },
   storyIcon: {
-    width: 48, height: 48, borderRadius: 12, backgroundColor: '#fff',
+    width: 48, height: 48, borderRadius: 12, backgroundColor: SURFACE,
     alignItems: 'center', justifyContent: 'center',
   },
   storyInfo: { flex: 1 },
@@ -433,11 +426,11 @@ const s = StyleSheet.create({
     borderTopWidth: 1, borderTopColor: BORDER, backgroundColor: BG,
   },
   addBtn: {
-    minHeight: 64, borderRadius: 18, backgroundColor: INK,
+    minHeight: 64, borderRadius: 18, backgroundColor: PRIMARY,
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 12,
     paddingHorizontal: 18,
   },
   addTextCol: { alignItems: 'flex-start', flexShrink: 1 },
   addText: { fontFamily: FONT_DISP, fontWeight: '800', fontSize: 18, color: '#fff' },
   addSub: { fontFamily: FONT_BODY, fontWeight: '600', fontSize: 13, color: 'rgba(255,255,255,0.8)' },
-});
+}));

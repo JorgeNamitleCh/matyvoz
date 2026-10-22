@@ -1,11 +1,12 @@
 import React, { useMemo, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { TimeScreenProps } from '../../navigation/types';
 import PictoIcon from '../../components/pictograms/PictoIcon';
 import DayItemPickerSheet from '../../components/time/DayItemPickerSheet';
 import { useDayStore, DayItem } from '../../stores/useDayStore';
 import { T, TILE, ToolTopBar, getNowAndNext, toMin, fmtDuration } from './timeShared';
+import { themedStyles } from '../../theme/tokens';
 
 type Props = TimeScreenProps<'FirstThen'>;
 
@@ -128,7 +129,7 @@ export default function FirstThenScreen({ navigation }: Props) {
         <MaterialCommunityIcons
           name={firstDone ? 'emoticon-happy-outline' : 'emoticon-neutral-outline'}
           size={22}
-          color={T.INK}
+          color={T.ON_PASTEL}
         />
         <Text style={s.bannerText}>
           {firstDone
@@ -169,13 +170,13 @@ export default function FirstThenScreen({ navigation }: Props) {
   );
 }
 
-const s = StyleSheet.create({
+const s = themedStyles(() => ({
   safe: { flex: 1, backgroundColor: T.BG },
   content: { paddingHorizontal: 16, paddingBottom: 16 },
 
   board: { backgroundColor: T.CARD, borderRadius: 18, overflow: 'hidden', borderWidth: 2, borderColor: 'transparent' },
   boardHighlight: { borderColor: T.ACCENT },
-  boardHead: { backgroundColor: T.INK, paddingHorizontal: 14, paddingVertical: 9 },
+  boardHead: { backgroundColor: T.PRIMARY, paddingHorizontal: 14, paddingVertical: 9 },
   boardHeadThen: { backgroundColor: '#0F1B26' },
   boardHeadText: { fontFamily: T.FONT_BODY, fontSize: 12, fontWeight: '800', letterSpacing: 1.4, color: '#fff' },
   boardBody: { flexDirection: 'row', alignItems: 'center', gap: 16, padding: 16 },
@@ -185,7 +186,7 @@ const s = StyleSheet.create({
   titleDone: { color: T.INK3, textDecorationLine: 'line-through' },
   boardSub: { fontFamily: T.FONT_BODY, fontSize: 13, fontWeight: '700', color: T.INK3, marginTop: 4 },
   startBtn: {
-    alignSelf: 'flex-start', backgroundColor: T.ACCENT, borderRadius: 8,
+    alignSelf: 'flex-start', backgroundColor: T.ACCENT_FILL, borderRadius: 8,
     paddingHorizontal: 14, paddingVertical: 8, marginTop: 10,
   },
   startText: { fontFamily: T.FONT_DISP, fontSize: 14, fontWeight: '800', color: '#fff' },
@@ -203,7 +204,7 @@ const s = StyleSheet.create({
     paddingHorizontal: 14, paddingVertical: 12,
   },
   bannerDone: { backgroundColor: TILE.green.bg, borderColor: TILE.green.stroke },
-  bannerText: { flex: 1, fontFamily: T.FONT_BODY, fontSize: 13, fontWeight: '800', color: T.INK },
+  bannerText: { flex: 1, fontFamily: T.FONT_BODY, fontSize: 13, fontWeight: '800', color: T.ON_PASTEL },
 
   footer: { flexDirection: 'row', gap: 10, paddingHorizontal: 16, paddingBottom: 14 },
   secondaryBtn: {
@@ -212,8 +213,8 @@ const s = StyleSheet.create({
   },
   secondaryText: { fontFamily: T.FONT_DISP, fontSize: 15, fontWeight: '800', color: T.INK },
   primaryBtn: {
-    flex: 1, height: 56, borderRadius: 14, backgroundColor: T.INK,
+    flex: 1, height: 56, borderRadius: 14, backgroundColor: T.PRIMARY,
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,
   },
   primaryText: { fontFamily: T.FONT_DISP, fontSize: 17, fontWeight: '800', color: '#fff' },
-});
+}));

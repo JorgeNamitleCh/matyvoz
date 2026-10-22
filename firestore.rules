@@ -1,0 +1,75 @@
+rules_version = '2';
+
+// Cada familia solo puede leer y escribir SUS datos.
+// Publicar con:  firebase deploy --only firestore:rules
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+    // El documento ya existe y es de la familia con sesión.
+    function ownsDoc() {
+      return signedIn() && resource.data.familyId == request.auth.uid;
+    }
+    // El documento que se escribe queda a nombre de la familia con sesión.
+    function writesOwn() {
+      return signedIn() && request.resource.data.familyId == request.auth.uid;
+    }
+    function ownsChild(childId) {
+      return signedIn()
+        && get(/databases/$(database)/documents/children/$(childId)).data.familyId == request.auth.uid;
+    }
+
+    match /families/{uid} {
+      allow read, create, update, delete: if signedIn() && request.auth.uid == uid;
+    }
+
+    // Colecciones con campo familyId.
+    match /children/{id} {
+      allow read, delete: if ownsDoc();
+      allow create: if writesOwn();
+      allow update: if ownsDoc() && writesOwn();
+    }
+    match /catalogCategories/{id} {
+      allow read, delete: if ownsDoc();
+      allow create: if writesOwn();
+      allow update: if ownsDoc() && writesOwn();
+    }
+    match /catalogItems/{id} {
+      allow read, delete: if ownsDoc();
+      allow create: if writesOwn();
+      allow update: if ownsDoc() && writesOwn();
+    }
+    match /dayActivities/{id} {
+      allow read, delete: if ownsDoc();
+      allow create: if writesOwn();
+      allow update: if ownsDoc() && writesOwn();
+    }
+    match /stories/{id} {
+      allow read, delete: if ownsDoc();
+      allow create: if writesOwn();
+      allow update: if ownsDoc() && writesOwn();
+    }
+    match /words/{id} {
+      allow read, delete: if ownsDoc();
+      allow create: if writesOwn();
+      allow update: if ownsDoc() && writesOwn();
+    }
+
+    // Colecciones ligadas al perfil (childId).
+    match /activities/{id} {
+      allow read, update, delete: if ownsChild(resource.data.childId);
+      allow create: if ownsChild(request.resource.data.childId);
+    }
+    match /timerSessions/{id} {
+      allow read, update, delete: if ownsChild(resource.data.childId);
+      allow create: if ownsChild(request.resource.data.childId);
+    }
+
+    // Todo lo demás: cerrado.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

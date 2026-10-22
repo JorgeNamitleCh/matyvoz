@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Modal, View, Text, TouchableOpacity, StyleSheet, Animated, Easing } from 'react-native';
+import { Modal, View, Text, TouchableOpacity, Animated, Easing } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { voiceRecorder } from '../../../infrastructure/audio/voiceRecorder';
 import { sayText } from '../../utils/stepVoice';
-import { INK, INK3, BORDER, BG, FONT_DISP, FONT_BODY } from '../../theme/tokens';
+import { BG, SURFACE, INK, INK3, BORDER, LINE_STRONG, PRIMARY, FONT_DISP, FONT_BODY, themedStyles } from '../../theme/tokens';
 
 const RED = '#D0413F';
 const GREEN = '#2E7D4F';
@@ -203,16 +203,16 @@ export default function RecordAudioSheet({ visible, title, text, audioUrl, onSav
   );
 }
 
-const s = StyleSheet.create({
+const s = themedStyles(() => ({
   root: { flex: 1, justifyContent: 'flex-end' },
   flex: { flex: 1 },
   backdrop: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.45)' },
   sheet: { backgroundColor: BG, borderTopLeftRadius: 26, borderTopRightRadius: 26, paddingHorizontal: 18, paddingBottom: 30 },
-  handle: { width: 42, height: 5, borderRadius: 3, backgroundColor: 'rgba(0,0,0,0.18)', alignSelf: 'center', marginTop: 10, marginBottom: 8 },
+  handle: { width: 42, height: 5, borderRadius: 3, backgroundColor: LINE_STRONG, alignSelf: 'center', marginTop: 10, marginBottom: 8 },
   headRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 },
   kicker: { fontFamily: FONT_BODY, fontSize: 11, fontWeight: '800', letterSpacing: 0.7, color: INK3 },
   close: {
-    width: 38, height: 38, borderRadius: 19, backgroundColor: '#fff',
+    width: 38, height: 38, borderRadius: 19, backgroundColor: SURFACE,
     borderWidth: 1.5, borderColor: BORDER, alignItems: 'center', justifyContent: 'center',
   },
   hint: { fontFamily: FONT_BODY, fontSize: 13, fontWeight: '700', color: INK3 },
@@ -221,7 +221,7 @@ const s = StyleSheet.create({
   micArea: { alignItems: 'center', paddingVertical: 24 },
   ring: { position: 'absolute', top: 24, width: 104, height: 104, borderRadius: 52, backgroundColor: RED },
   mic: {
-    width: 104, height: 104, borderRadius: 52, backgroundColor: INK,
+    width: 104, height: 104, borderRadius: 52, backgroundColor: PRIMARY,
     alignItems: 'center', justifyContent: 'center',
   },
   micRec: { backgroundColor: RED },
@@ -229,7 +229,7 @@ const s = StyleSheet.create({
   state: { fontFamily: FONT_BODY, fontSize: 14, fontWeight: '800', color: INK, marginTop: 14, textAlign: 'center' },
 
   notice: {
-    flexDirection: 'row', gap: 10, alignItems: 'flex-start', backgroundColor: '#fff',
+    flexDirection: 'row', gap: 10, alignItems: 'flex-start', backgroundColor: SURFACE,
     borderRadius: 14, padding: 14, marginVertical: 18,
   },
   noticeText: { flex: 1, fontFamily: FONT_BODY, fontSize: 13, fontWeight: '600', color: INK, lineHeight: 18 },
@@ -237,18 +237,18 @@ const s = StyleSheet.create({
 
   row: { flexDirection: 'row', gap: 10, marginBottom: 10 },
   btn: {
-    height: 50, borderRadius: 14, backgroundColor: '#fff', borderWidth: 1.5, borderColor: BORDER,
+    height: 50, borderRadius: 14, backgroundColor: SURFACE, borderWidth: 1.5, borderColor: BORDER,
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,
   },
   btnIcon: {
-    width: 50, height: 50, borderRadius: 14, backgroundColor: '#fff', borderWidth: 1.5, borderColor: BORDER,
+    width: 50, height: 50, borderRadius: 14, backgroundColor: SURFACE, borderWidth: 1.5, borderColor: BORDER,
     alignItems: 'center', justifyContent: 'center',
   },
   btnText: { fontFamily: FONT_DISP, fontSize: 15, fontWeight: '800', color: INK },
   primary: {
-    height: 58, borderRadius: 16, backgroundColor: INK,
+    height: 58, borderRadius: 16, backgroundColor: PRIMARY,
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,
   },
   primaryText: { fontFamily: FONT_DISP, fontSize: 17, fontWeight: '800', color: '#fff' },
   disabled: { opacity: 0.4 },
-});
+}));

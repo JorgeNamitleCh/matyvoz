@@ -12,10 +12,13 @@ export const ChildMapper = {
       communicationType: data.communicationType,
       sensitivities: data.sensitivities ?? [],
       minimalAnimations: data.minimalAnimations ?? false,
+      profileType: data.profileType ?? 'child',
     };
   },
 
   toFirestore(child: Omit<Child, 'id'>): Record<string, unknown> {
-    return { ...child };
+    const data: Record<string, unknown> = { ...child };
+    Object.keys(data).forEach(k => data[k] === undefined && delete data[k]);
+    return data;
   },
 };

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  View, Text, StyleSheet, ScrollView, TouchableOpacity, SafeAreaView, TextInput, KeyboardAvoidingView, Platform,
+  View, Text, ScrollView, TouchableOpacity, SafeAreaView, TextInput, KeyboardAvoidingView, Platform,
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { WordsScreenProps } from '../../navigation/types';
@@ -11,6 +11,7 @@ import { useDialog } from '../../providers/DialogProvider';
 import { WORD_SECTIONS, sectionOf } from '../../utils/wordCategories';
 import { Word } from '../../../core/domain/entities';
 import { T } from '../time/timeShared';
+import { SURFACE, OK_SOFT, themedStyles } from '../../theme/tokens';
 
 type Props = WordsScreenProps<'AddWord'>;
 
@@ -85,7 +86,7 @@ export default function AddWordScreen({ navigation, route }: Props) {
                 <TouchableOpacity
                   key={w.key}
                   onPress={() => patch({ category: w.key })}
-                  style={[s.chip, { backgroundColor: active ? w.bg : '#fff', borderColor: active ? w.stroke : T.BORDER }]}
+                  style={[s.chip, { backgroundColor: active ? w.bg : SURFACE, borderColor: active ? w.stroke : T.BORDER }]}
                 >
                   <Text style={[s.chipText, { color: active ? w.stroke : T.INK3 }]}>{w.label}</Text>
                 </TouchableOpacity>
@@ -169,7 +170,7 @@ export default function AddWordScreen({ navigation, route }: Props) {
   );
 }
 
-const s = StyleSheet.create({
+const s = themedStyles(() => ({
   safe: { flex: 1, backgroundColor: T.BG },
   flex: { flex: 1 },
   row: { flexDirection: 'row', gap: 10 },
@@ -182,7 +183,7 @@ const s = StyleSheet.create({
     borderWidth: 1.5, borderColor: T.BORDER, alignItems: 'center', justifyContent: 'center',
   },
   topTitle: { fontFamily: T.FONT_BODY, fontSize: 16, fontWeight: '800', color: T.INK },
-  saveBtn: { height: 40, paddingHorizontal: 16, borderRadius: 10, backgroundColor: T.INK, justifyContent: 'center' },
+  saveBtn: { height: 40, paddingHorizontal: 16, borderRadius: 10, backgroundColor: T.PRIMARY, justifyContent: 'center' },
   saveText: { fontFamily: T.FONT_DISP, fontSize: 14, fontWeight: '800', color: '#fff' },
 
   content: { paddingHorizontal: 16, paddingBottom: 30 },
@@ -204,6 +205,6 @@ const s = StyleSheet.create({
     flexDirection: 'row', alignItems: 'center', gap: 10, backgroundColor: T.CARD,
     borderRadius: 12, paddingHorizontal: 14, height: 50,
   },
-  voiceOn: { backgroundColor: '#D8EEDC' },
+  voiceOn: { backgroundColor: OK_SOFT },
   voiceText: { fontFamily: T.FONT_BODY, fontSize: 14, fontWeight: '800', color: T.INK },
-});
+}));

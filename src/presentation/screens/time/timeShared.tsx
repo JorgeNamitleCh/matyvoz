@@ -1,21 +1,27 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DayItem } from '../../stores/useDayStore';
+import { SCHEME, BG, SURFACE, INK, INK2, INK3, BORDER, ACCENT, ACCENT_FILL, PRIMARY, FONT_DISP, FONT_BODY, themedStyles } from '../../theme/tokens';
 
 // ── Tokens de las pantallas de Tiempo (según diseño) ───────────────────────
 export const T = {
-  BG: '#EFEEEA',
-  CARD: '#FFFFFF',
-  INK: '#231B2E',
-  INK2: '#4a4a4a',
-  INK3: '#8a8a8a',
-  BORDER: 'rgba(0,0,0,0.08)',
-  ACCENT: '#2A5F8F',
+  get BG() { return BG; },
+  get CARD() { return SURFACE; },
+  /** En modo claro, la tinta de estas pantallas es un poco morada (según diseño). */
+  get INK() { return SCHEME === 'dark' ? INK : '#231B2E'; },
+  get PRIMARY() { return SCHEME === 'dark' ? PRIMARY : '#231B2E'; },
+  get INK2() { return INK2; },
+  get INK3() { return INK3; },
+  get BORDER() { return BORDER; },
+  get ACCENT() { return ACCENT; },
+  get ACCENT_FILL() { return ACCENT_FILL; },
+  /** Tinta fija para texto sobre colores pastel (TILE / INFO_BG), igual en ambos modos. */
+  ON_PASTEL: '#231B2E',
   RED: '#D0413F',
   INFO_BG: '#7FC4E8',
-  FONT_DISP: 'Nunito ExtraLight',
-  FONT_BODY: 'Atkinson Hyperlegible',
+  FONT_DISP,
+  FONT_BODY,
 };
 
 export const TILE = {
@@ -81,7 +87,7 @@ export function ToolTopBar({
   );
 }
 
-const s = StyleSheet.create({
+const s = themedStyles(() => ({
   topBar: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
     paddingHorizontal: 16, paddingTop: 6, paddingBottom: 14,
@@ -93,4 +99,4 @@ const s = StyleSheet.create({
   },
   topSpacer: { width: 44 },
   topTitle: { fontFamily: T.FONT_BODY, fontSize: 17, fontWeight: '800', color: T.INK },
-});
+}));
