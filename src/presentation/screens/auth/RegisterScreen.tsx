@@ -8,6 +8,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   Linking,
+  useWindowDimensions,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -20,12 +21,16 @@ import { LEGAL } from '../../../infrastructure/config/legal';
 import { FEATURES } from '../../../infrastructure/config/features';
 import { BG, SURFACE, INK, INK2, INK3, BORDER, LINE_STRONG, ACCENT, PRIMARY, DANGER, DANGER_BG, OK, FONT_DISP, FONT_BODY, themedStyles } from '../../theme/tokens';
 
+const FORM_MAX_WIDTH = 560;
+
 type Props = AuthScreenProps<'Register'>;
 
 const RELATIONS = ['Madre', 'Padre', 'Cuidador', 'Abu', 'Tutor', 'Otro'];
 
 export default function RegisterScreen({ navigation }: Props) {
   const setFamily = useAuthStore(s => s.setFamily);
+  // En iPad el formulario no se estira a todo lo ancho.
+  const formWidth = Math.min(FORM_MAX_WIDTH, useWindowDimensions().width - 32);
 
   const [name, setName] = useState('');
   const [relation, setRelation] = useState('Madre');
@@ -88,7 +93,7 @@ export default function RegisterScreen({ navigation }: Props) {
             onBack={() => navigation.goBack()}
           />
 
-          <View style={s.card}>
+          <View style={[s.card, { width: formWidth }]}>
             {FEATURES.socialSignIn && (
               <>
                 <TouchableOpacity style={s.appleBtn}>
@@ -227,7 +232,7 @@ const s = themedStyles(() => ({
 
   card: {
     backgroundColor: SURFACE,
-    marginHorizontal: 16, marginTop: -32,
+    alignSelf: 'center', marginTop: -32,
     borderRadius: 24, padding: 22,
     shadowColor: '#1d2a36', shadowOffset: { width: 0, height: 10 },
     shadowOpacity: 0.1, shadowRadius: 24, elevation: 6,

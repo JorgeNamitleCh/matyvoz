@@ -8,6 +8,7 @@ import {
   Platform,
   ScrollView,
   Linking,
+  useWindowDimensions,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -21,10 +22,14 @@ import { FEATURES } from '../../../infrastructure/config/features';
 import { LEGAL } from '../../../infrastructure/config/legal';
 import { BG, SURFACE, INK, INK3, BORDER, ACCENT, PRIMARY, DANGER, DANGER_BG, FONT_DISP, FONT_BODY, themedStyles } from '../../theme/tokens';
 
+const FORM_MAX_WIDTH = 560;
+
 type Props = AuthScreenProps<'Login'>;
 
 export default function LoginScreen({ navigation }: Props) {
   const setFamily = useAuthStore(s => s.setFamily);
+  // En iPad el formulario no se estira a todo lo ancho.
+  const formWidth = Math.min(FORM_MAX_WIDTH, useWindowDimensions().width - 32);
   const { showDialog } = useDialog();
 
   const [email, setEmail] = useState('');
@@ -73,7 +78,7 @@ export default function LoginScreen({ navigation }: Props) {
         >
           <AuthHero subtitle="Rutinas, historias y palabras para cada día." />
 
-          <View style={s.card}>
+          <View style={[s.card, { width: formWidth }]}>
             <Text style={s.title}>Hola de nuevo</Text>
             <Text style={s.subtitle}>Inicia sesión para ver la rutina y las historias.</Text>
 
@@ -141,7 +146,7 @@ export default function LoginScreen({ navigation }: Props) {
             </TouchableOpacity>
           </View>
 
-          <View style={s.footer}>
+          <View style={[s.footer, { width: formWidth }]}>
             <Text style={s.footerText}>¿Primera vez en MatyVoz?</Text>
             <TouchableOpacity style={s.secondaryBtn} onPress={() => navigation.navigate('Register')}>
               <Text style={s.secondaryBtnText}>Crear una cuenta</Text>
@@ -170,7 +175,7 @@ const s = themedStyles(() => ({
 
   card: {
     backgroundColor: SURFACE,
-    marginHorizontal: 16, marginTop: -36,
+    alignSelf: 'center', marginTop: -36,
     borderRadius: 24, padding: 22,
     shadowColor: '#1d2a36', shadowOffset: { width: 0, height: 10 },
     shadowOpacity: 0.1, shadowRadius: 24, elevation: 6,
@@ -208,7 +213,7 @@ const s = themedStyles(() => ({
   disabledBtn: { opacity: 0.6 },
   primaryBtnText: { fontFamily: FONT_DISP, color: '#fff', fontWeight: '800', fontSize: 16 },
 
-  footer: { alignItems: 'center', marginTop: 24, paddingHorizontal: 16 },
+  footer: { alignItems: 'center', alignSelf: 'center', marginTop: 24 },
   footerText: { fontFamily: FONT_BODY, fontSize: 14, color: INK3, fontWeight: '600', marginBottom: 10 },
   secondaryBtn: {
     alignSelf: 'stretch', height: 52, borderRadius: 14,

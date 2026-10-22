@@ -10,12 +10,14 @@ import ProfileScreen from '../screens/account/ProfileScreen';
 import EditFamilyScreen from '../screens/account/EditFamilyScreen';
 import EditPersonScreen from '../screens/account/EditPersonScreen';
 import DeleteAccountScreen from '../screens/account/DeleteAccountScreen';
+import AnimatedSplash from '../components/brand/AnimatedSplash';
 import { applyScheme, BG, SURFACE, INK, BORDER, ACCENT } from '../theme/tokens';
 
 const Root = createStackNavigator<RootStackParams>();
 
 export default function AppNavigator() {
   const isAuthenticated = useAuthStore(s => s.isAuthenticated);
+  const isLoading = useAuthStore(s => s.isLoading);
   const scheme = useColorScheme() === 'dark' ? 'dark' : 'light';
   // Antes de pintar los hijos: la paleta tiene que coincidir con el modo del sistema.
   applyScheme(scheme);
@@ -53,6 +55,8 @@ export default function AppNavigator() {
           )}
         </Root.Navigator>
       </NavigationContainer>
+      {/* Encima de todo mientras se revisa la sesión; luego se desvanece y se desmonta. */}
+      <AnimatedSplash loading={isLoading} />
     </>
   );
 }

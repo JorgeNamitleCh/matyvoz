@@ -53,6 +53,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     else { return }
 
     let window = UIWindow(windowScene: windowScene)
+    window.backgroundColor = splashBlue
     self.window = window
     appDelegate.window = window
 
@@ -64,7 +65,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
   }
 }
 
+/// Mismo azul del splash (LaunchScreen.storyboard): evita un destello blanco
+/// entre el splash nativo y el splash animado de JS.
+let splashBlue = UIColor(red: 0.1647, green: 0.3725, blue: 0.5608, alpha: 1)
+
 class ReactNativeDelegate: RCTDefaultReactNativeFactoryDelegate {
+  override func customize(_ rootView: RCTRootView) {
+    super.customize(rootView)
+    rootView.backgroundColor = splashBlue
+  }
+
   override func sourceURL(for bridge: RCTBridge) -> URL? {
     self.bundleURL()
   }
