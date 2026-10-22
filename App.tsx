@@ -1,45 +1,30 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import React from 'react';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { ThemeProvider } from './src/infrastructure/theme';
+import { DialogProvider } from './src/presentation/providers/DialogProvider';
+import { useAuth } from './src/presentation/hooks/useAuth';
+import { useFamilyData } from './src/presentation/hooks/useFamilyData';
+import { useSyncErrorDialog, useVoiceNoticeDialog } from './src/presentation/hooks/useSyncErrorDialog';
+import { useDayClock } from './src/presentation/hooks/useDayClock';
+import AppNavigator from './src/presentation/navigation/AppNavigator';
 
-import { NewAppScreen } from '@react-native/new-app-screen';
-import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
-import {
-  SafeAreaProvider,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
-
-function App() {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  return (
-    <SafeAreaProvider>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <AppContent />
-    </SafeAreaProvider>
-  );
+function AppWithAuth() {
+  useAuth();
+  useFamilyData();
+  useSyncErrorDialog();
+  useVoiceNoticeDialog();
+  useDayClock();
+  return <AppNavigator />;
 }
 
-function AppContent() {
-  const safeAreaInsets = useSafeAreaInsets();
-
+export default function App() {
   return (
-    <View style={styles.container}>
-      <NewAppScreen
-        templateFileName="App.tsx"
-        safeAreaInsets={safeAreaInsets}
-      />
-    </View>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <ThemeProvider>
+        <DialogProvider>
+          <AppWithAuth />
+        </DialogProvider>
+      </ThemeProvider>
+    </GestureHandlerRootView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
-
-export default App;

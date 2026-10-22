@@ -15,7 +15,22 @@ buildscript {
         classpath("com.android.tools.build:gradle")
         classpath("com.facebook.react:react-native-gradle-plugin")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin")
+        classpath("com.google.gms:google-services:4.4.2")
     }
 }
 
 apply plugin: "com.facebook.react.rootproject"
+
+// Librerías antiguas (ej. react-native-tts 4.x) no declaran `namespace`,
+// que AGP 8+ exige. Se lo asignamos desde el package de su AndroidManifest.
+subprojects { sub ->
+    sub.plugins.withId("com.android.library") {
+        if (sub.android.namespace == null) {
+            def manifest = sub.file("src/main/AndroidManifest.xml")
+            if (manifest.exists()) {
+                def pkg = new XmlSlurper().parse(manifest).@package.text()
+                if (pkg) sub.android.namespace = pkg
+            }
+        }
+    }
+}

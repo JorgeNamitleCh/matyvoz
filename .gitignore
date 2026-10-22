@@ -73,3 +73,12 @@ yarn-error.log
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+# Firebase config (contains API keys)
+android/app/google-services.json
+ios/MatyVoz/GoogleService-Info.plist
+
+# Local / personal
+_to_delete/
+Claude outputs/
+.claude/
